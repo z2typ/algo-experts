@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code Patterns!</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --white: #fffef0;
+    --yellow: #FFE600;
+    --red: #FF2D2D;
+    --blue: #1565FF;
+    --green: #00C44F;
+    --orange: #FF8C00;
+    --purple: #9B00FF;
+    --pink: #FF3EA5;
+    --shadow: 5px 5px 0px var(--black);
+    --shadow-lg: 7px 7px 0px var(--black);
+    --border: 3px solid var(--black);
+    --border-thick: 4px solid var(--black);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--white);
+    background-image: radial-gradient(circle, #ccc 1px, transparent 1px);
+    background-size: 20px 20px;
+    font-family: 'Comic Neue', cursive;
+    color: var(--black);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--yellow);
+    border-bottom: var(--border-thick);
+    padding: 32px 0 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+    pointer-events: none;
+  }
+
+  .burst {
+    position: absolute;
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    letter-spacing: 2px;
+    padding: 12px 16px;
+    border: 3px solid var(--black);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--black);
+    transform: rotate(-8deg);
+    z-index: 2;
+  }
+
+  .burst-1 {
+    background: var(--red);
+    color: var(--white);
+    top: 20px; right: 60px;
+    animation: wobble 3s ease-in-out infinite;
+  }
+
+  .burst-2 {
+    background: var(--blue);
+    color: var(--white);
+    bottom: 16px; right: 200px;
+    font-size: 16px;
+    transform: rotate(5deg);
+    animation: wobble 2.5s ease-in-out infinite 0.5s;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-8deg) scale(1); }
+    50% { transform: rotate(-6deg) scale(1.04); }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-eyebrow {
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 4px;
+    color: var(--black);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: 3px;
+    color: var(--black);
+    -webkit-text-stroke: 2px var(--black);
+    text-shadow: 6px 6px 0 var(--red), 10px 10px 0 rgba(0,0,0,0.15);
+    opacity: 0;
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--red);
+    -webkit-text-stroke: 2px var(--black);
+    text-shadow: 6px 6px 0 var(--blue), 10px 10px 0 rgba(0,0,0,0.15);
+  }
+
+  .speech-bubble {
+    position: relative;
+    background: var(--white);
+    border: var(--border-thick);
+    border-radius: 18px;
+    padding: 14px 20px;
+    margin-top: 20px;
+    display: inline-block;
+    max-width: 520px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.35s forwards;
+  }
+
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    top: -20px; left: 40px;
+    border: 10px solid transparent;
+    border-bottom-color: var(--black);
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    top: -14px; left: 41px;
+    border: 9px solid transparent;
+    border-bottom-color: var(--white);
+  }
+
+  /* ===== SEARCH ===== */
+  .search-area {
+    padding: 28px 0 0;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.45s forwards;
+  }
+
+  .search-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+  }
+
+  .search-input {
+    background: var(--white);
+    border: var(--border-thick);
+    border-radius: 8px;
+    padding: 12px 16px 12px 44px;
+    font-family: 'Comic Neue', cursive;
+    font-size: 15px;
+    font-weight: 700;
+    width: 380px;
+    max-width: 100%;
+    outline: none;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .search-input:focus {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* ===== FILTERS ===== */
+  .filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 28px 0 24px;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.5s forwards;
+  }
+
+  .filter-btn {
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    background: var(--white);
+    border: var(--border);
+    border-radius: 6px;
+    padding: 6px 18px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--black);
+    transition: transform 0.1s, box-shadow 0.1s;
+    color: var(--black);
+  }
+
+  .filter-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--black);
+  }
+
+  .filter-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--black);
+  }
+
+  .filter-btn.active {
+    background: var(--black);
+    color: var(--yellow);
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--red);
+  }
+
+  /* ===== GRID ===== */
+  .patterns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    padding-bottom: 60px;
+  }
+
+  /* ===== CARD ===== */
+  .pattern-card {
+    background: var(--white);
+    border: var(--border-thick);
+    border-radius: 12px;
+    padding: 24px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+
+  .pattern-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 10px;
+    background: var(--card-color, var(--yellow));
+    border-bottom: 3px solid var(--black);
+  }
+
+  .pattern-card:hover {
+    transform: translate(-4px, -4px) rotate(-0.5deg);
+    box-shadow: 11px 11px 0 var(--black);
+  }
+
+  .pattern-card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 var(--black);
+  }
+
+  .card-number {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #888;
+    margin-top: 6px;
+    margin-bottom: 8px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .difficulty {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border: 2px solid var(--black);
+    border-radius: 4px;
+    box-shadow: 2px 2px 0 var(--black);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .diff-easy { background: var(--green); color: var(--white); }
+  .diff-medium { background: var(--orange); color: var(--white); }
+  .diff-hard { background: var(--red); color: var(--white); }
+
+  .card-title {
+    font-family: 'Bangers', cursive;
+    font-size: 26px;
+    letter-spacing: 1.5px;
+    line-height: 1.1;
+    color: var(--black);
+  }
+
+  .card-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #333;
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .tag {
+    font-family: 'Bangers', cursive;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--black);
+    border: 2px solid var(--black);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--yellow);
+  }
+
+  .card-examples {
+    font-size: 12px;
+    color: #555;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-examples span {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--white);
+    border: var(--border-thick);
+    border-radius: 16px;
+    max-width: 760px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 10px 10px 0 var(--black);
+    transform: scale(0.85) rotate(-1deg);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+  }
+
+  .modal-overlay.open .modal {
+    transform: scale(1) rotate(0deg);
+  }
+
+  .modal-header {
+    background: var(--modal-color, var(--yellow));
+    border-bottom: var(--border-thick);
+    padding: 24px 28px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .modal-header-num {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 4px;
+  }
+
+  .modal-header-title {
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--black);
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+    padding-right: 50px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: var(--red);
+    border: 3px solid var(--black);
+    color: var(--white);
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 1px;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--black);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .modal-close:hover {
+    transform: translate(-2px,-2px) rotate(-5deg);
+    box-shadow: 5px 5px 0 var(--black);
+  }
+
+  .modal-body { padding: 28px; }
+
+  .modal-section { margin-bottom: 28px; }
+
+  .modal-section-title {
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--white);
+    background: var(--black);
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    box-shadow: 3px 3px 0 var(--modal-color, var(--yellow));
+  }
+
+  .modal-section p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #333;
+  }
+
+  /* Complexity */
+  .complexity-row { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .complexity-item {
+    background: var(--black);
+    color: var(--yellow);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 4px 4px 0 var(--modal-color, var(--yellow));
+  }
+
+  .complexity-label {
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.6;
+  }
+
+  .complexity-value {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  /* Steps */
+  .steps-list { list-style: none; counter-reset: steps; }
+
+  .steps-list li {
+    counter-increment: steps;
+    font-size: 13px;
+    line-height: 1.65;
+    padding: 10px 12px 10px 48px;
+    border: 2px solid var(--black);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: var(--white);
+    position: relative;
+    box-shadow: 3px 3px 0 var(--black);
+    font-weight: 700;
+  }
+
+  .steps-list li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 36px;
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px 0 0 6px;
+    letter-spacing: 1px;
+  }
+
+  /* Code block */
+  .code-wrapper { position: relative; }
+
+  .code-block {
+    background: #1a1a2e;
+    border: var(--border-thick);
+    border-radius: 10px;
+    padding: 44px 20px 20px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    overflow-x: auto;
+    white-space: pre;
+    tab-size: 4;
+    box-shadow: 5px 5px 0 var(--black);
+    color: #e8e8f0;
+  }
+
+  .code-block .comment { color: #6272a4; font-style: italic; }
+  .code-block .keyword { color: #ff79c6; font-weight: bold; }
+  .code-block .func { color: #50fa7b; }
+  .code-block .str { color: #f1fa8c; }
+  .code-block .num { color: #bd93f9; }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--yellow);
+    border: 2px solid var(--black);
+    color: var(--black);
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--black);
+    transition: transform 0.1s, box-shadow 0.1s;
+    z-index: 1;
+  }
+
+  .copy-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--black); }
+  .copy-btn.copied { background: var(--green); color: var(--white); }
+
+  /* Use cases */
+  .use-cases { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .use-case-chip {
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    background: var(--white);
+    border: 2px solid var(--black);
+    border-radius: 6px;
+    box-shadow: 3px 3px 0 var(--black);
+    cursor: default;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .use-case-chip:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 5px 5px 0 var(--black);
+    background: var(--yellow);
+  }
+
+  /* Empty state */
+  .empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 80px 20px;
+    font-family: 'Bangers', cursive;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: #aaa;
+  }
+
+  /* Footer */
+  footer {
+    border-top: var(--border-thick);
+    background: var(--black);
+    padding: 20px 0;
+  }
+
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer .footer-text {
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--yellow);
+  }
+
+  .stat-badge {
+    background: var(--yellow);
+    border: 3px solid var(--white);
+    border-radius: 8px;
+    padding: 6px 18px;
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--black);
+    box-shadow: 4px 4px 0 rgba(255,255,255,0.3);
+  }
+
+  /* Animations */
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.7) rotate(-3deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--white); border-left: 2px solid var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--black); border-radius: 4px; }
+
+  /* ===== THEME TOGGLE BUTTON ===== */
+  .theme-toggle {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 200;
+    background: var(--black);
+    color: var(--yellow);
+    border: 3px solid var(--yellow);
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 var(--yellow);
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s, background 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .theme-toggle:hover {
+    transform: translate(-3px, -3px) rotate(-2deg);
+    box-shadow: 7px 7px 0 var(--yellow);
+  }
+
+  .theme-toggle:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--yellow);
+  }
+
+  .toggle-icon {
+    font-size: 20px;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    display: inline-block;
+  }
+
+  /* ===== DARK THEME ===== */
+  body.dark {
+    background-color: #111118;
+    background-image: radial-gradient(circle, #2a2a3a 1px, transparent 1px);
+    color: #f0f0ff;
+  }
+
+  body.dark header {
+    background: #1a1a2e;
+    border-bottom-color: var(--yellow);
+  }
+
+  body.dark header::before {
+    background-image: radial-gradient(circle, rgba(255,230,0,0.06) 1.5px, transparent 1.5px);
+  }
+
+  body.dark h1 {
+    color: var(--yellow);
+    -webkit-text-stroke: 2px var(--yellow);
+    text-shadow: 6px 6px 0 var(--red), 10px 10px 0 rgba(0,0,0,0.5);
+  }
+
+  body.dark h1 em {
+    color: var(--red);
+    -webkit-text-stroke: 2px var(--yellow);
+  }
+
+  body.dark .header-eyebrow { color: var(--yellow); }
+
+  body.dark .speech-bubble {
+    background: #1e1e30;
+    border-color: var(--yellow);
+    color: #f0f0ff;
+    box-shadow: 5px 5px 0 var(--yellow);
+  }
+
+  body.dark .speech-bubble::before { border-bottom-color: var(--yellow); }
+  body.dark .speech-bubble::after { border-bottom-color: #1e1e30; }
+
+  body.dark .search-input {
+    background: #1e1e30;
+    border-color: var(--yellow);
+    color: #f0f0ff;
+    box-shadow: 5px 5px 0 var(--yellow);
+  }
+
+  body.dark .search-input:focus {
+    box-shadow: 7px 7px 0 var(--yellow);
+  }
+
+  body.dark .search-input::placeholder { color: #666; }
+
+  body.dark .filter-btn {
+    background: #1e1e30;
+    border-color: #444;
+    color: #ccc;
+    box-shadow: 3px 3px 0 #444;
+  }
+
+  body.dark .filter-btn:hover {
+    border-color: var(--yellow);
+    color: var(--yellow);
+    box-shadow: 5px 5px 0 var(--yellow);
+  }
+
+  body.dark .filter-btn.active {
+    background: var(--yellow);
+    color: #111;
+    border-color: var(--yellow);
+    box-shadow: 4px 4px 0 var(--red);
+  }
+
+  body.dark .pattern-card {
+    background: #1a1a2e;
+    border-color: #444;
+    box-shadow: 7px 7px 0 #444;
+  }
+
+  body.dark .pattern-card::before {
+    border-bottom-color: #444;
+  }
+
+  body.dark .pattern-card:hover {
+    border-color: var(--yellow);
+    box-shadow: 11px 11px 0 var(--yellow);
+  }
+
+  body.dark .card-title { color: #f0f0ff; }
+
+  body.dark .card-desc { color: #aaa; }
+
+  body.dark .card-number { color: #555; }
+
+  body.dark .card-examples { color: #777; }
+
+  body.dark .card-examples span { color: #7eb8ff; }
+
+  body.dark .tag {
+    background: #2a2a3a;
+    border-color: #555;
+    color: var(--yellow);
+  }
+
+  body.dark .difficulty {
+    border-color: #555;
+    box-shadow: 2px 2px 0 #555;
+  }
+
+  body.dark .modal {
+    background: #14141f;
+    border-color: #555;
+    box-shadow: 10px 10px 0 var(--yellow);
+  }
+
+  body.dark .modal-header-num { color: rgba(255,255,255,0.4); }
+  body.dark .modal-header-title { color: #111; }
+
+  body.dark .modal-body { background: #14141f; }
+
+  body.dark .modal-section p { color: #bbb; }
+
+  body.dark .steps-list li {
+    background: #1e1e30;
+    border-color: #444;
+    color: #ddd;
+    box-shadow: 3px 3px 0 #444;
+  }
+
+  body.dark .use-case-chip {
+    background: #1e1e30;
+    border-color: #555;
+    color: #ddd;
+    box-shadow: 3px 3px 0 #555;
+  }
+
+  body.dark .use-case-chip:hover {
+    background: #2a2a1a;
+    border-color: var(--yellow);
+    color: var(--yellow);
+    box-shadow: 5px 5px 0 var(--yellow);
+  }
+
+  body.dark .empty { color: #444; }
+
+  body.dark footer {
+    background: #0a0a12;
+    border-top-color: var(--yellow);
+  }
+
+  body.dark ::-webkit-scrollbar-track { background: #111118; }
+  body.dark ::-webkit-scrollbar-thumb { background: #333; }
+
+  body.dark .theme-toggle {
+    background: var(--yellow);
+    color: #111;
+    border-color: #111;
+    box-shadow: 4px 4px 0 #111;
+  }
+
+  body.dark .theme-toggle:hover {
+    box-shadow: 7px 7px 0 #111;
+  }
+
+  body.dark .theme-toggle:active {
+    box-shadow: 1px 1px 0 #111;
+  }
+
+  /* Dark mode transition */
+  body, header, .pattern-card, .modal, .filter-btn, .search-input, .speech-bubble, footer, .tag, .steps-list li, .use-case-chip {
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="burst burst-1">⚡ POW!</div>
+  <div class="burst burst-2">🔥 15 PATTERNS!</div>
+  <div class="container">
+    <div class="header-eyebrow">★ THE ULTIMATE GUIDE TO ★</div>
+    <h1>CODE<br><em>PATTERNS!</em></h1>
+    <div class="speech-bubble">
+      Master the <strong>15 patterns</strong> that appear in 90% of tech interviews at FAANG &amp; top companies! 🚀
+    </div>
+    <div class="search-area">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search patterns..." />
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">★ ALL</button>
+    <button class="filter-btn" data-filter="easy">🟢 EASY</button>
+    <button class="filter-btn" data-filter="medium">🟠 MEDIUM</button>
+    <button class="filter-btn" data-filter="hard">🔴 HARD</button>
+    <button class="filter-btn" data-filter="arrays">📊 ARRAYS</button>
+    <button class="filter-btn" data-filter="trees">🌳 TREES</button>
+    <button class="filter-btn" data-filter="graphs">🕸️ GRAPHS</button>
+    <button class="filter-btn" data-filter="dp">🧠 DP</button>
+  </div>
+
+  <div class="patterns-grid" id="grid"></div>
+</div>
+
+<footer>
+  <div class="container">
+    <span class="footer-text">💥 CODE PATTERNS UNIVERSE — ISSUE #1</span>
+    <div class="stat-badge">⚡ <span id="visibleCount">15</span> PATTERNS</div>
+  </div>
+</footer>
+
+<!-- THEME TOGGLE -->
+<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+  <span class="toggle-icon" id="toggleIcon">🌙</span>
+  <span id="toggleLabel">DARK MODE</span>
+</button>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header" id="modalHeader">
+      <div class="modal-header-num" id="modalNumber"></div>
+      <div class="modal-header-title" id="modalTitle"></div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const CARD_COLORS = ['#FFE600','#FF2D2D','#1565FF','#00C44F','#FF8C00','#9B00FF','#FF3EA5','#00BCD4','#8BC34A','#FF5722','#3F51B5','#009688','#E91E63','#FF9800','#607D8B'];
+
+const patterns = [
+  {
+    id: 1,
+    title: "Two Pointers",
+    difficulty: "easy",
+    categories: ["arrays"],
+    desc: "Use two indices moving inward or in the same direction to solve array/string problems in O(n) time.",
+    tags: ["Array", "String", "Sorting"],
+    examples: "Valid Palindrome, 3Sum, Container With Most Water",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(1)",
+    when: ["Sorted array problems", "Finding pairs that sum to target", "Reversing or comparing from both ends", "Removing duplicates in-place"],
+    steps: [
+      "Initialize left pointer at start, right pointer at end (or both at start for same-direction).",
+      "Define a condition to move one or both pointers based on comparison.",
+      "Continue until pointers meet or cross.",
+      "Return result when condition is satisfied."
+    ],
+    useCases: ["Pair Sum", "Remove Duplicates", "Palindrome Check", "Merge Sorted Arrays", "Trapping Rain Water"],
+    code: `<span class="keyword">def</span> <span class="func">two_sum_sorted</span>(nums, target):
+    left, right = <span class="num">0</span>, len(nums) - <span class="num">1</span>
+
+    <span class="keyword">while</span> left < right:
+        current = nums[left] + nums[right]
+
+        <span class="keyword">if</span> current == target:
+            <span class="keyword">return</span> [left, right]
+        <span class="keyword">elif</span> current < target:
+            left += <span class="num">1</span>    <span class="comment"># need larger sum</span>
+        <span class="keyword">else</span>:
+            right -= <span class="num">1</span>   <span class="comment"># need smaller sum</span>
+
+    <span class="keyword">return</span> []`
+  },
+  {
+    id: 2,
+    title: "Sliding Window",
+    difficulty: "medium",
+    categories: ["arrays"],
+    desc: "Maintain a dynamic or fixed-size window over sequential data to find subarrays/substrings satisfying a condition.",
+    tags: ["Array", "String", "Hash Map"],
+    examples: "Longest Substring Without Repeating, Max Sum Subarray, Minimum Window Substring",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(k)",
+    when: ["Contiguous subarray or substring problems", "Fixed or variable window size", "Optimization of range queries"],
+    steps: [
+      "Initialize window boundaries (left=0, right=0) and any tracking data structures.",
+      "Expand right pointer to grow the window.",
+      "When constraint is violated, shrink from left until valid again.",
+      "Track and update the answer at each valid window state."
+    ],
+    useCases: ["Max Sum Subarray of K", "Longest Substring", "Anagram Search", "Min Window Substring", "Permutation in String"],
+    code: `<span class="keyword">def</span> <span class="func">max_sum_subarray</span>(nums, k):
+    window_sum = sum(nums[:<span class="num">k</span>])
+    max_sum = window_sum
+
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(k, len(nums)):
+        <span class="comment"># slide window: add right, remove left</span>
+        window_sum += nums[i] - nums[i - k]
+        max_sum = max(max_sum, window_sum)
+
+    <span class="keyword">return</span> max_sum`
+  },
+  {
+    id: 3,
+    title: "Fast & Slow Pointers",
+    difficulty: "easy",
+    categories: ["arrays"],
+    desc: "Floyd's cycle detection: two pointers at different speeds to detect cycles or find midpoints in linked structures.",
+    tags: ["Linked List", "Array", "Cycle"],
+    examples: "Linked List Cycle, Find Middle of Linked List, Happy Number",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(1)",
+    when: ["Cycle detection in linked list or array", "Finding middle element", "Palindrome linked list"],
+    steps: [
+      "Initialize slow = head, fast = head.",
+      "Move slow by 1 step, fast by 2 steps each iteration.",
+      "For cycle detection: if fast == slow, cycle exists.",
+      "For middle: when fast reaches end, slow is at middle."
+    ],
+    useCases: ["Detect Cycle", "Find Cycle Start", "Find Middle", "Palindrome List", "Happy Number"],
+    code: `<span class="keyword">def</span> <span class="func">has_cycle</span>(head):
+    slow = fast = head
+
+    <span class="keyword">while</span> fast <span class="keyword">and</span> fast.next:
+        slow = slow.next
+        fast = fast.next.next
+
+        <span class="keyword">if</span> slow == fast:
+            <span class="keyword">return</span> <span class="keyword">True</span>  <span class="comment"># cycle found!</span>
+
+    <span class="keyword">return</span> <span class="keyword">False</span>`
+  },
+  {
+    id: 4,
+    title: "Binary Search",
+    difficulty: "easy",
+    categories: ["arrays"],
+    desc: "Eliminate half the search space each iteration. Works on sorted arrays or any monotonic condition.",
+    tags: ["Array", "Sorting", "Divide & Conquer"],
+    examples: "Search in Rotated Sorted Array, Find Peak Element, Koko Eating Bananas",
+    timeComplexity: "O(log n)",
+    spaceComplexity: "O(1)",
+    when: ["Sorted array search", "Finding boundary conditions", "Minimizing/maximizing over a range"],
+    steps: [
+      "Set lo = 0, hi = len(arr) - 1.",
+      "Compute mid = lo + (hi - lo) // 2 to avoid overflow.",
+      "If arr[mid] == target, return mid.",
+      "Narrow search space: if target > arr[mid], lo = mid+1, else hi = mid-1."
+    ],
+    useCases: ["Classic Search", "First/Last Position", "Search in Rotated Array", "Minimum in Rotated Array", "Binary Search on Answer"],
+    code: `<span class="keyword">def</span> <span class="func">binary_search</span>(nums, target):
+    lo, hi = <span class="num">0</span>, len(nums) - <span class="num">1</span>
+
+    <span class="keyword">while</span> lo <= hi:
+        mid = lo + (hi - lo) // <span class="num">2</span>
+
+        <span class="keyword">if</span> nums[mid] == target:
+            <span class="keyword">return</span> mid
+        <span class="keyword">elif</span> nums[mid] < target:
+            lo = mid + <span class="num">1</span>
+        <span class="keyword">else</span>:
+            hi = mid - <span class="num">1</span>
+
+    <span class="keyword">return</span> -<span class="num">1</span>`
+  },
+  {
+    id: 5,
+    title: "Merge Intervals",
+    difficulty: "medium",
+    categories: ["arrays"],
+    desc: "Sort intervals by start time, then greedily merge overlapping ones. A foundation for scheduling problems.",
+    tags: ["Array", "Sorting", "Greedy"],
+    examples: "Merge Intervals, Insert Interval, Non-overlapping Intervals",
+    timeComplexity: "O(n log n)",
+    spaceComplexity: "O(n)",
+    when: ["Overlapping intervals or ranges", "Scheduling problems", "Calendar conflict detection"],
+    steps: [
+      "Sort intervals by their start time.",
+      "Initialize result with the first interval.",
+      "For each subsequent interval, check if it overlaps with the last in result.",
+      "If overlap: merge by extending end. If not: append as new interval."
+    ],
+    useCases: ["Merge Intervals", "Insert Interval", "Meeting Rooms", "Employee Free Time", "Interval List Intersections"],
+    code: `<span class="keyword">def</span> <span class="func">merge_intervals</span>(intervals):
+    intervals.sort(key=<span class="keyword">lambda</span> x: x[<span class="num">0</span>])
+    merged = [intervals[<span class="num">0</span>]]
+
+    <span class="keyword">for</span> start, end <span class="keyword">in</span> intervals[<span class="num">1</span>:]:
+        last_end = merged[-<span class="num">1</span>][<span class="num">1</span>]
+
+        <span class="keyword">if</span> start <= last_end:
+            merged[-<span class="num">1</span>][<span class="num">1</span>] = max(last_end, end)
+        <span class="keyword">else</span>:
+            merged.append([start, end])
+
+    <span class="keyword">return</span> merged`
+  },
+  {
+    id: 6,
+    title: "Tree BFS",
+    difficulty: "easy",
+    categories: ["trees"],
+    desc: "Level-order traversal using a queue. Essential for shortest path problems and level-by-level tree processing.",
+    tags: ["Tree", "Queue", "Graph"],
+    examples: "Level Order Traversal, Right Side View, Zigzag Level Order",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(w)",
+    when: ["Level-by-level tree processing", "Shortest path in unweighted graph", "Minimum depth problems"],
+    steps: [
+      "Initialize queue with root node.",
+      "While queue is non-empty, process all nodes at current level.",
+      "For each node, add its children to the queue.",
+      "Track level or collect results as needed."
+    ],
+    useCases: ["Level Order", "Right Side View", "Zigzag Traversal", "Min Depth", "Connect Level Nodes"],
+    code: `<span class="keyword">from</span> collections <span class="keyword">import</span> deque
+
+<span class="keyword">def</span> <span class="func">level_order</span>(root):
+    <span class="keyword">if not</span> root: <span class="keyword">return</span> []
+
+    result, queue = [], deque([root])
+
+    <span class="keyword">while</span> queue:
+        level = []
+        <span class="keyword">for</span> _ <span class="keyword">in</span> range(len(queue)):
+            node = queue.popleft()
+            level.append(node.val)
+            <span class="keyword">if</span> node.left: queue.append(node.left)
+            <span class="keyword">if</span> node.right: queue.append(node.right)
+        result.append(level)
+
+    <span class="keyword">return</span> result`
+  },
+  {
+    id: 7,
+    title: "Tree DFS",
+    difficulty: "easy",
+    categories: ["trees"],
+    desc: "Explore tree paths recursively. Use pre/in/post-order to solve path sum, subtree, and structure problems.",
+    tags: ["Tree", "Recursion", "Stack"],
+    examples: "Path Sum, Max Depth, Validate BST, Diameter of Binary Tree",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(h)",
+    when: ["Path problems in trees", "Subtree matching", "Recursive tree structure problems"],
+    steps: [
+      "Define base case: return when node is null.",
+      "Recursively compute result for left and right subtrees.",
+      "Combine results at current node (pre/in/post-order).",
+      "Propagate answer upward or update global variable."
+    ],
+    useCases: ["Max Depth", "Path Sum", "Diameter", "Validate BST", "Lowest Common Ancestor"],
+    code: `<span class="keyword">def</span> <span class="func">max_depth</span>(root):
+    <span class="keyword">if not</span> root:
+        <span class="keyword">return</span> <span class="num">0</span>
+    left  = max_depth(root.left)
+    right = max_depth(root.right)
+    <span class="keyword">return</span> <span class="num">1</span> + max(left, right)
+
+<span class="comment"># Path sum — pass state downward</span>
+<span class="keyword">def</span> <span class="func">has_path_sum</span>(node, remaining):
+    <span class="keyword">if not</span> node: <span class="keyword">return False</span>
+    <span class="keyword">if not</span> node.left <span class="keyword">and not</span> node.right:
+        <span class="keyword">return</span> remaining == node.val
+    <span class="keyword">return</span> (has_path_sum(node.left,  remaining - node.val) <span class="keyword">or</span>
+            has_path_sum(node.right, remaining - node.val))`
+  },
+  {
+    id: 8,
+    title: "Graph BFS / DFS",
+    difficulty: "medium",
+    categories: ["graphs"],
+    desc: "Traverse graphs iteratively (BFS) or recursively (DFS) with a visited set to avoid revisiting nodes.",
+    tags: ["Graph", "Matrix", "Union Find"],
+    examples: "Number of Islands, Clone Graph, Course Schedule, Rotting Oranges",
+    timeComplexity: "O(V+E)",
+    spaceComplexity: "O(V)",
+    when: ["Connected component counting", "Shortest path", "Cycle detection", "Topological ordering"],
+    steps: [
+      "Build adjacency list or work with given matrix.",
+      "Maintain visited set to avoid revisiting nodes.",
+      "BFS: use queue; DFS: use stack or recursion.",
+      "For each unvisited node, run traversal and count/process components."
+    ],
+    useCases: ["Number of Islands", "Clone Graph", "Pacific Atlantic", "Word Ladder", "Surrounded Regions"],
+    code: `<span class="keyword">def</span> <span class="func">num_islands</span>(grid):
+    rows, cols = len(grid), len(grid[<span class="num">0</span>])
+    visited, count = set(), <span class="num">0</span>
+
+    <span class="keyword">def</span> <span class="func">dfs</span>(r, c):
+        <span class="keyword">if</span> (r,c) <span class="keyword">in</span> visited <span class="keyword">or</span> r < <span class="num">0</span> <span class="keyword">or</span> c < <span class="num">0</span> \
+           <span class="keyword">or</span> r >= rows <span class="keyword">or</span> c >= cols <span class="keyword">or</span> grid[r][c] == <span class="str">'0'</span>:
+            <span class="keyword">return</span>
+        visited.add((r, c))
+        <span class="keyword">for</span> dr, dc <span class="keyword">in</span> [(<span class="num">0</span>,<span class="num">1</span>),(<span class="num">0</span>,-<span class="num">1</span>),(<span class="num">1</span>,<span class="num">0</span>),(-<span class="num">1</span>,<span class="num">0</span>)]:
+            dfs(r+dr, c+dc)
+
+    <span class="keyword">for</span> r <span class="keyword">in</span> range(rows):
+        <span class="keyword">for</span> c <span class="keyword">in</span> range(cols):
+            <span class="keyword">if</span> grid[r][c] == <span class="str">'1'</span> <span class="keyword">and</span> (r,c) <span class="keyword">not in</span> visited:
+                dfs(r, c); count += <span class="num">1</span>
+    <span class="keyword">return</span> count`
+  },
+  {
+    id: 9,
+    title: "Topological Sort",
+    difficulty: "medium",
+    categories: ["graphs"],
+    desc: "Order nodes in a DAG so all edges go forward. Used for dependency resolution and course scheduling.",
+    tags: ["Graph", "DAG", "Queue"],
+    examples: "Course Schedule, Alien Dictionary, Task Scheduler",
+    timeComplexity: "O(V+E)",
+    spaceComplexity: "O(V)",
+    when: ["Dependency ordering", "Course prerequisites", "Build systems", "Cycle detection in directed graph"],
+    steps: [
+      "Build adjacency list and compute in-degree of every node.",
+      "Initialize queue with all nodes having in-degree 0.",
+      "Dequeue node, add to result, decrement neighbor in-degrees.",
+      "If neighbor in-degree hits 0, enqueue it. If result length != V, cycle exists."
+    ],
+    useCases: ["Course Schedule", "Alien Dictionary", "Parallel Courses", "Build Order", "Sequence Reconstruction"],
+    code: `<span class="keyword">from</span> collections <span class="keyword">import</span> deque, defaultdict
+
+<span class="keyword">def</span> <span class="func">topo_sort</span>(n, prerequisites):
+    graph = defaultdict(list)
+    in_degree = [<span class="num">0</span>] * n
+
+    <span class="keyword">for</span> a, b <span class="keyword">in</span> prerequisites:
+        graph[b].append(a)
+        in_degree[a] += <span class="num">1</span>
+
+    queue = deque(i <span class="keyword">for</span> i <span class="keyword">in</span> range(n) <span class="keyword">if</span> in_degree[i] == <span class="num">0</span>)
+    order = []
+
+    <span class="keyword">while</span> queue:
+        node = queue.popleft()
+        order.append(node)
+        <span class="keyword">for</span> nei <span class="keyword">in</span> graph[node]:
+            in_degree[nei] -= <span class="num">1</span>
+            <span class="keyword">if</span> in_degree[nei] == <span class="num">0</span>:
+                queue.append(nei)
+
+    <span class="keyword">return</span> order <span class="keyword">if</span> len(order) == n <span class="keyword">else</span> []`
+  },
+  {
+    id: 10,
+    title: "Dynamic Programming",
+    difficulty: "hard",
+    categories: ["dp"],
+    desc: "Break problems into overlapping subproblems; cache results. Master 1D, 2D, and interval DP templates.",
+    tags: ["DP", "Memoization", "Tabulation"],
+    examples: "Coin Change, Longest Common Subsequence, Edit Distance, Knapsack",
+    timeComplexity: "O(n^2) typical",
+    spaceComplexity: "O(n) to O(n^2)",
+    when: ["Optimization problems", "Counting problems", "Overlapping subproblems", "Choices at each step with recurrence"],
+    steps: [
+      "Define dp[i] or dp[i][j] — what does each state represent?",
+      "Identify the recurrence relation (transition).",
+      "Determine base cases.",
+      "Fill table bottom-up (or memoize top-down). Return dp[n] or dp[m][n]."
+    ],
+    useCases: ["Coin Change", "Knapsack", "LCS", "Edit Distance", "Longest Palindromic Subsequence"],
+    code: `<span class="comment"># Coin Change — min coins to make amount</span>
+<span class="keyword">def</span> <span class="func">coin_change</span>(coins, amount):
+    dp = [float(<span class="str">'inf'</span>)] * (amount + <span class="num">1</span>)
+    dp[<span class="num">0</span>] = <span class="num">0</span>  <span class="comment"># base case</span>
+
+    <span class="keyword">for</span> amt <span class="keyword">in</span> range(<span class="num">1</span>, amount + <span class="num">1</span>):
+        <span class="keyword">for</span> coin <span class="keyword">in</span> coins:
+            <span class="keyword">if</span> coin <= amt:
+                dp[amt] = min(dp[amt], dp[amt - coin] + <span class="num">1</span>)
+
+    <span class="keyword">return</span> dp[amount] <span class="keyword">if</span> dp[amount] != float(<span class="str">'inf'</span>) <span class="keyword">else</span> -<span class="num">1</span>`
+  },
+  {
+    id: 11,
+    title: "Backtracking",
+    difficulty: "hard",
+    categories: ["arrays", "graphs"],
+    desc: "Explore all possibilities recursively: make a choice, recurse, then undo the choice (backtrack).",
+    tags: ["Recursion", "Combination", "Permutation"],
+    examples: "Subsets, Permutations, N-Queens, Sudoku Solver, Word Search",
+    timeComplexity: "O(2^n) to O(n!)",
+    spaceComplexity: "O(n)",
+    when: ["Generate all combinations or permutations", "Constraint satisfaction problems", "Exploring decision trees"],
+    steps: [
+      "Define recursive function with current state and choices.",
+      "Base case: when a complete solution is found, record it.",
+      "Iterate over valid choices, apply choice, recurse, then undo (backtrack).",
+      "Use pruning (early termination) to cut invalid branches."
+    ],
+    useCases: ["Subsets", "Permutations", "Combinations", "N-Queens", "Sudoku", "Word Search"],
+    code: `<span class="keyword">def</span> <span class="func">subsets</span>(nums):
+    result = []
+
+    <span class="keyword">def</span> <span class="func">backtrack</span>(start, current):
+        result.append(current[:])  <span class="comment"># record snapshot</span>
+
+        <span class="keyword">for</span> i <span class="keyword">in</span> range(start, len(nums)):
+            current.append(nums[i])      <span class="comment"># choose</span>
+            backtrack(i + <span class="num">1</span>, current)   <span class="comment"># explore</span>
+            current.pop()               <span class="comment"># un-choose</span>
+
+    backtrack(<span class="num">0</span>, [])
+    <span class="keyword">return</span> result`
+  },
+  {
+    id: 12,
+    title: "Heap / Priority Queue",
+    difficulty: "medium",
+    categories: ["arrays"],
+    desc: "Maintain a sorted top-k or streaming median efficiently. Min-heap and max-heap are interview staples.",
+    tags: ["Heap", "Greedy", "Sorting"],
+    examples: "Kth Largest Element, Top K Frequent, Find Median From Data Stream",
+    timeComplexity: "O(n log k)",
+    spaceComplexity: "O(k)",
+    when: ["Top K elements", "Streaming median", "Scheduling by priority", "Merge K sorted lists"],
+    steps: [
+      "For top-k largest: maintain a min-heap of size k.",
+      "Push each element; if heap size exceeds k, pop minimum.",
+      "At end, heap contains the k largest elements.",
+      "For median: use two heaps (max-heap for lower half, min-heap for upper half)."
+    ],
+    useCases: ["Kth Largest", "Top K Frequent", "Merge K Lists", "Task Scheduler", "Find Median", "Dijkstra's"],
+    code: `<span class="keyword">import</span> heapq
+
+<span class="keyword">def</span> <span class="func">kth_largest</span>(nums, k):
+    min_heap = []
+
+    <span class="keyword">for</span> num <span class="keyword">in</span> nums:
+        heapq.heappush(min_heap, num)
+        <span class="keyword">if</span> len(min_heap) > k:
+            heapq.heappop(min_heap)  <span class="comment"># remove smallest</span>
+
+    <span class="keyword">return</span> min_heap[<span class="num">0</span>]  <span class="comment"># kth largest</span>`
+  },
+  {
+    id: 13,
+    title: "Monotonic Stack",
+    difficulty: "medium",
+    categories: ["arrays"],
+    desc: "Maintain a stack where elements are always increasing or decreasing. Solves next greater/smaller in O(n).",
+    tags: ["Stack", "Array", "Greedy"],
+    examples: "Daily Temperatures, Largest Rectangle in Histogram, Next Greater Element",
+    timeComplexity: "O(n)",
+    spaceComplexity: "O(n)",
+    when: ["Next greater/smaller element", "Span calculation", "Histogram problems", "Trapping rain water"],
+    steps: [
+      "Initialize empty stack to store indices.",
+      "Iterate through array. While stack non-empty and current element breaks monotonicity, pop and resolve.",
+      "The popped element's answer is the current index (or element).",
+      "Push current index onto stack. Remaining elements have no next greater/smaller."
+    ],
+    useCases: ["Daily Temperatures", "Next Greater Element", "Largest Rectangle", "Trapping Rain Water", "Sum of Subarray Minimums"],
+    code: `<span class="keyword">def</span> <span class="func">daily_temperatures</span>(temps):
+    n = len(temps)
+    result = [<span class="num">0</span>] * n
+    stack = []  <span class="comment"># monotonic decreasing stack of indices</span>
+
+    <span class="keyword">for</span> i, t <span class="keyword">in</span> enumerate(temps):
+        <span class="keyword">while</span> stack <span class="keyword">and</span> temps[stack[-<span class="num">1</span>]] < t:
+            j = stack.pop()
+            result[j] = i - j  <span class="comment"># days to wait</span>
+        stack.append(i)
+
+    <span class="keyword">return</span> result`
+  },
+  {
+    id: 14,
+    title: "Trie",
+    difficulty: "medium",
+    categories: ["trees"],
+    desc: "Prefix tree for efficient string search, autocomplete, and word validation in O(L) time per operation.",
+    tags: ["String", "Tree", "Prefix"],
+    examples: "Implement Trie, Word Search II, Design Add and Search Words",
+    timeComplexity: "O(L)",
+    spaceComplexity: "O(N * L)",
+    when: ["Prefix matching and autocomplete", "Word dictionary with wildcards", "IP routing tables"],
+    steps: [
+      "Node has children dict and is_end flag.",
+      "Insert: for each char, create child if missing, move to child. Mark end.",
+      "Search: for each char, return False if child missing, else traverse. Return is_end.",
+      "Starts_with: same as search but return True when string is consumed."
+    ],
+    useCases: ["Autocomplete", "Word Search II", "Add and Search Words", "Replace Words", "Maximum XOR"],
+    code: `<span class="keyword">class</span> <span class="func">TrieNode</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self):
+        self.children = {}
+        self.is_end = <span class="keyword">False</span>
+
+<span class="keyword">class</span> <span class="func">Trie</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self):
+        self.root = TrieNode()
+
+    <span class="keyword">def</span> <span class="func">insert</span>(self, word):
+        node = self.root
+        <span class="keyword">for</span> ch <span class="keyword">in</span> word:
+            <span class="keyword">if</span> ch <span class="keyword">not in</span> node.children:
+                node.children[ch] = TrieNode()
+            node = node.children[ch]
+        node.is_end = <span class="keyword">True</span>
+
+    <span class="keyword">def</span> <span class="func">search</span>(self, word):
+        node = self.root
+        <span class="keyword">for</span> ch <span class="keyword">in</span> word:
+            <span class="keyword">if</span> ch <span class="keyword">not in</span> node.children:
+                <span class="keyword">return False</span>
+            node = node.children[ch]
+        <span class="keyword">return</span> node.is_end`
+  },
+  {
+    id: 15,
+    title: "Union-Find (DSU)",
+    difficulty: "hard",
+    categories: ["graphs"],
+    desc: "Disjoint Set Union with path compression and union by rank. O(a(n)) per operation — practically constant.",
+    tags: ["Graph", "Connected Components", "Cycle"],
+    examples: "Number of Connected Components, Redundant Connection, Accounts Merge",
+    timeComplexity: "O(a(n))",
+    spaceComplexity: "O(n)",
+    when: ["Dynamic connectivity", "Kruskal's MST", "Cycle detection in undirected graph", "Grouping/merging sets"],
+    steps: [
+      "Initialize parent[i] = i and rank[i] = 0 for all nodes.",
+      "Find(x): return root with path compression (parent[x] = find(parent[x])).",
+      "Union(x, y): find roots of both; attach smaller rank tree under larger.",
+      "Connected(x, y): return find(x) == find(y)."
+    ],
+    useCases: ["Number of Components", "Redundant Connection", "Kruskal's MST", "Accounts Merge", "Satisfiability of Equality Equations"],
+    code: `<span class="keyword">class</span> <span class="func">UnionFind</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, n):
+        self.parent = list(range(n))
+        self.rank   = [<span class="num">0</span>] * n
+
+    <span class="keyword">def</span> <span class="func">find</span>(self, x):
+        <span class="keyword">if</span> self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        <span class="keyword">return</span> self.parent[x]
+
+    <span class="keyword">def</span> <span class="func">union</span>(self, x, y):
+        px, py = self.find(x), self.find(y)
+        <span class="keyword">if</span> px == py: <span class="keyword">return False</span>
+        <span class="keyword">if</span> self.rank[px] < self.rank[py]: px, py = py, px
+        self.parent[py] = px
+        <span class="keyword">if</span> self.rank[px] == self.rank[py]:
+            self.rank[px] += <span class="num">1</span>
+        <span class="keyword">return True</span>`
+  }
+];
+
+// ===== RENDER =====
+function render(data) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  document.getElementById('visibleCount').textContent = data.length;
+
+  if (data.length === 0) {
+    grid.innerHTML = '<div class="empty">😵 NO PATTERNS FOUND! TRY AGAIN!</div>';
+    return;
+  }
+
+  data.forEach((p, idx) => {
+    const color = CARD_COLORS[(p.id - 1) % CARD_COLORS.length];
+    const card = document.createElement('div');
+    card.className = 'pattern-card';
+    card.style.setProperty('--card-color', color);
+    card.style.animationDelay = `${idx * 0.05}s`;
+
+    const diffClass = `diff-${p.difficulty}`;
+    const diffEmoji = p.difficulty === 'easy' ? '🟢' : p.difficulty === 'medium' ? '🟠' : '🔴';
+
+    card.innerHTML = `
+      <div class="card-number">PATTERN #${String(p.id).padStart(2,'0')}</div>
+      <div class="card-header">
+        <div class="card-title">${p.title}</div>
+        <div class="difficulty ${diffClass}">${diffEmoji} ${p.difficulty.toUpperCase()}</div>
+      </div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      <div class="card-examples">💡 <span>${p.examples.split(',')[0].trim()}</span> + ${p.examples.split(',').length - 1} more</div>
+    `;
+
+    card.addEventListener('click', () => openModal(p, color));
+    grid.appendChild(card);
+  });
+}
+
+// ===== FILTER =====
+let activeFilter = 'all';
+
+function filterData() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  return patterns.filter(p => {
+    const matchFilter = activeFilter === 'all' || activeFilter === p.difficulty || p.categories.includes(activeFilter);
+    const matchSearch = !query || p.title.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query) || p.tags.some(t => t.toLowerCase().includes(query)) || p.examples.toLowerCase().includes(query);
+    return matchFilter && matchSearch;
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', () => render(filterData()));
+
+document.getElementById('filters').addEventListener('click', e => {
+  if (!e.target.classList.contains('filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  activeFilter = e.target.dataset.filter;
+  render(filterData());
+});
+
+// ===== MODAL =====
+function openModal(p, color) {
+  document.getElementById('modalNumber').textContent = `PATTERN #${String(p.id).padStart(2,'0')}`;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalHeader').style.background = color || '#FFE600';
+  document.getElementById('modal').style.setProperty('--modal-color', color || '#FFE600');
+
+  const diffEmoji = p.difficulty === 'easy' ? '🟢' : p.difficulty === 'medium' ? '🟠' : '🔴';
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">📖 OVERVIEW</div>
+      <p>${p.desc}</p>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">⚡ COMPLEXITY</div>
+      <div class="complexity-row">
+        <div class="complexity-item">
+          <span class="complexity-label">TIME</span>
+          <span class="complexity-value">${p.timeComplexity}</span>
+        </div>
+        <div class="complexity-item">
+          <span class="complexity-label">SPACE</span>
+          <span class="complexity-value">${p.spaceComplexity}</span>
+        </div>
+        <div class="complexity-item">
+          <span class="complexity-label">LEVEL</span>
+          <span class="complexity-value">${diffEmoji} ${p.difficulty.toUpperCase()}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🎯 WHEN TO USE</div>
+      <ul class="steps-list">
+        ${p.when.map(w => `<li>${w}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🔢 ALGORITHM STEPS</div>
+      <ul class="steps-list">
+        ${p.steps.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">💻 CODE TEMPLATE</div>
+      <div class="code-wrapper">
+        <button class="copy-btn" onclick="copyCode(this)">📋 COPY</button>
+        <pre class="code-block">${p.code}</pre>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🏆 CLASSIC PROBLEMS</div>
+      <div class="use-cases">
+        ${p.useCases.map(u => `<span class="use-case-chip">${u}</span>`).join('')}
+      </div>
+    </div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+document.getElementById('modalClose').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.remove('open');
+});
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('open');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+
+// ===== COPY =====
+function copyCode(btn) {
+  const pre = btn.nextElementSibling;
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = '✅ COPIED!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 COPY'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ===== THEME TOGGLE =====
+let isDark = false;
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('dark', isDark);
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+  icon.style.transform = 'rotate(360deg) scale(1.3)';
+  setTimeout(() => { icon.style.transform = ''; }, 400);
+  if (isDark) {
+    icon.textContent = '☀️';
+    label.textContent = 'LIGHT MODE';
+  } else {
+    icon.textContent = '🌙';
+    label.textContent = 'DARK MODE';
+  }
+  localStorage.setItem('comicTheme', isDark ? 'dark' : 'light');
+}
+
+// Restore saved theme
+(function() {
+  try {
+    if (localStorage.getItem('comicTheme') === 'dark') {
+      isDark = true;
+      document.body.classList.add('dark');
+      document.getElementById('toggleIcon').textContent = '☀️';
+      document.getElementById('toggleLabel').textContent = 'LIGHT MODE';
+    }
+  } catch(e) {}
+})();
+
+render(patterns);
+</script>
+</body>
+</html>
