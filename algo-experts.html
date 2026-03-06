@@ -4,57 +4,299 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AlgoExpert → LeetCode</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0a0a0f;--card:#16161f;--border:#2a2a3a;--easy:#22c55e;--medium:#3b82f6;--hard:#f97316;--vhard:#ef4444;--text:#e2e8f0;--muted:#64748b;--accent:#a78bfa;}
+  :root{
+    --bg:#fef9c3;
+    --paper:#fffde7;
+    --ink:#111111;
+    --easy:#16a34a;
+    --easy-bg:#dcfce7;
+    --medium:#1d4ed8;
+    --medium-bg:#dbeafe;
+    --hard:#ea580c;
+    --hard-bg:#ffedd5;
+    --vhard:#dc2626;
+    --vhard-bg:#fee2e2;
+    --accent:#facc15;
+    --panel-border:3px solid #111;
+    --shadow:5px 5px 0 #111;
+    --shadow-sm:3px 3px 0 #111;
+  }
+
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;}
-  header{padding:3rem 2rem 2rem;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#1a0a2e 0%,var(--bg) 100%);}
-  header h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#a78bfa,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem;}
-  header p{color:var(--muted);font-family:'Space Mono',monospace;font-size:.85rem;margin-bottom:.5rem;}
-  .legend{display:flex;gap:1.2rem;justify-content:center;font-family:'Space Mono',monospace;font-size:.72rem;flex-wrap:wrap;}
-  .legend-item{display:flex;align-items:center;gap:.4rem;color:var(--muted);}
-  .dot-lc{width:8px;height:8px;border-radius:50%;background:var(--accent);}
-  .controls{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;padding:1.5rem 2rem;position:sticky;top:0;z-index:10;background:rgba(10,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
-  input[type="text"]{padding:.5rem 1rem;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:6px;font-family:'Space Mono',monospace;font-size:.8rem;outline:none;width:260px;transition:border-color .2s;}
-  input[type="text"]:focus{border-color:var(--accent);}
-  input[type="text"]::placeholder{color:var(--muted);}
-  .filter-btn{padding:.5rem 1rem;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-family:'Syne',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;}
-  .filter-btn:hover{border-color:var(--accent);color:var(--text);}
-  .filter-btn.active{color:var(--bg);border-color:transparent;}
-  .filter-btn.all.active{background:var(--accent);}
+
+  body{
+    background-color:#e8d5b0;
+    background-image:
+      radial-gradient(circle, #c4a882 1px, transparent 1px);
+    background-size:18px 18px;
+    color:var(--ink);
+    font-family:'Comic Neue',cursive;
+    min-height:100vh;
+  }
+
+  /* ── HEADER PANEL ── */
+  header{
+    background:#facc15;
+    border-bottom:4px solid var(--ink);
+    padding:2.5rem 2rem 2rem;
+    text-align:center;
+    position:relative;
+    box-shadow:0 6px 0 #111;
+  }
+
+  /* starburst behind title */
+  header::before{
+    content:'';
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-54%);
+    width:340px;height:340px;
+    background:
+      conic-gradient(
+        #fff176 0deg 10deg, transparent 10deg 20deg,
+        #fff176 20deg 30deg, transparent 30deg 40deg,
+        #fff176 40deg 50deg, transparent 50deg 60deg,
+        #fff176 60deg 70deg, transparent 70deg 80deg,
+        #fff176 80deg 90deg, transparent 90deg 100deg,
+        #fff176 100deg 110deg, transparent 110deg 120deg,
+        #fff176 120deg 130deg, transparent 130deg 140deg,
+        #fff176 140deg 150deg, transparent 150deg 160deg,
+        #fff176 160deg 170deg, transparent 170deg 180deg,
+        #fff176 180deg 190deg, transparent 190deg 200deg,
+        #fff176 200deg 210deg, transparent 210deg 220deg,
+        #fff176 220deg 230deg, transparent 230deg 240deg,
+        #fff176 240deg 250deg, transparent 250deg 260deg,
+        #fff176 260deg 270deg, transparent 270deg 280deg,
+        #fff176 280deg 290deg, transparent 290deg 300deg,
+        #fff176 300deg 310deg, transparent 310deg 320deg,
+        #fff176 320deg 330deg, transparent 330deg 340deg,
+        #fff176 340deg 350deg, transparent 350deg 360deg
+      );
+    border-radius:50%;
+    opacity:.5;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  header h1{
+    font-family:'Bangers',cursive;
+    font-size:clamp(3rem,8vw,6rem);
+    letter-spacing:.06em;
+    color:var(--ink);
+    text-shadow:4px 4px 0 #fff,6px 6px 0 #111;
+    position:relative;z-index:1;
+    line-height:1;
+    margin-bottom:.6rem;
+  }
+
+  /* speech bubble for subtitle */
+  header p{
+    display:inline-block;
+    background:#fff;
+    border:3px solid var(--ink);
+    border-radius:20px 20px 20px 4px;
+    padding:.5rem 1.2rem;
+    font-family:'Comic Neue',cursive;
+    font-weight:700;
+    font-size:.95rem;
+    color:var(--ink);
+    position:relative;z-index:1;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:1rem;
+  }
+  header p::after{
+    content:'';
+    position:absolute;
+    bottom:-14px;left:20px;
+    border:7px solid transparent;
+    border-top-color:#111;
+  }
+  header p::before{
+    content:'';
+    position:absolute;
+    bottom:-10px;left:21px;
+    border:6px solid transparent;
+    border-top-color:#fff;
+    z-index:1;
+  }
+
+  .legend{
+    display:flex;gap:1rem;justify-content:center;
+    font-family:'Comic Neue',cursive;font-size:.8rem;
+    flex-wrap:wrap;margin-top:1rem;position:relative;z-index:1;
+  }
+  .legend-item{
+    display:flex;align-items:center;gap:.4rem;
+    background:#fff;border:2px solid var(--ink);
+    padding:.2rem .7rem;border-radius:999px;
+    box-shadow:var(--shadow-sm);font-weight:700;
+  }
+  .dot-lc{width:10px;height:10px;border-radius:50%;background:#7c3aed;border:2px solid var(--ink);}
+
+  /* ── CONTROLS PANEL ── */
+  .controls{
+    display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;
+    padding:1rem 2rem;position:sticky;top:0;z-index:200;
+    background:#60a5fa;
+    border-bottom:3px solid var(--ink);
+    box-shadow:0 4px 0 #111;
+  }
+
+  input[type="text"]{
+    padding:.5rem 1rem;
+    background:#fff;
+    border:3px solid var(--ink);
+    color:var(--ink);
+    font-family:'Comic Neue',cursive;font-size:.9rem;font-weight:700;
+    outline:none;width:260px;
+    border-radius:6px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .1s;
+  }
+  input[type="text"]:focus{transform:scale(1.02);}
+  input[type="text"]::placeholder{color:#94a3b8;}
+
+  .filter-btn{
+    padding:.5rem 1.1rem;
+    border:3px solid var(--ink);
+    background:#fff;
+    color:var(--ink);
+    font-family:'Bangers',cursive;font-size:1rem;letter-spacing:.06em;
+    cursor:pointer;
+    border-radius:6px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .1s,box-shadow .1s;
+  }
+  .filter-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #111;}
+  .filter-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+  .filter-btn.active{color:#fff;}
+  .filter-btn.all.active{background:#111;}
   .filter-btn.easy.active{background:var(--easy);}
   .filter-btn.medium.active{background:var(--medium);}
   .filter-btn.hard.active{background:var(--hard);}
   .filter-btn.vhard.active{background:var(--vhard);}
-  .stats{display:flex;gap:1.5rem;justify-content:center;padding:1rem 2rem;font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);flex-wrap:wrap;}
-  .stat-item span{color:var(--text);font-weight:700;}
-  .table-wrap{max-width:1150px;margin:0 auto;padding:1rem 1.5rem 4rem;}
+
+  /* ── STATS BAR ── */
+  .stats{
+    display:flex;gap:1rem;justify-content:center;
+    padding:.75rem 2rem;
+    font-family:'Comic Neue',cursive;font-size:.85rem;font-weight:700;
+    color:var(--ink);flex-wrap:wrap;
+    background:#fde68a;
+    border-bottom:3px solid var(--ink);
+  }
+  .stat-item{
+    background:#fff;border:2px solid var(--ink);
+    padding:.2rem .75rem;border-radius:6px;
+    box-shadow:var(--shadow-sm);
+  }
+  .stat-item span{color:#dc2626;}
+
+  /* ── TABLE PANEL ── */
+  .table-wrap{
+    max-width:1150px;margin:2rem auto;
+    padding:0 1.5rem 4rem;
+  }
+
+  /* comic panel box */
+  .table-wrap > table{
+    background:var(--paper);
+    border:4px solid var(--ink);
+    border-radius:4px;
+    box-shadow:8px 8px 0 #111;
+  }
+
   table{width:100%;border-collapse:collapse;}
-  thead th{padding:.75rem 1rem;text-align:left;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);}
-  tbody tr{border-bottom:1px solid rgba(42,42,58,.5);transition:background .15s;}
-  tbody tr:hover{background:var(--card);}
+
+  thead{background:#111;}
+  thead th{
+    padding:.75rem 1rem;text-align:left;
+    font-family:'Bangers',cursive;font-size:.95rem;
+    color:#facc15;letter-spacing:.1em;
+    border-right:2px solid #333;
+  }
+  thead th:last-child{border-right:none;}
+
+  tbody tr{
+    border-bottom:2px solid #e2e8f0;
+    transition:background .1s,transform .1s;
+  }
+  tbody tr:nth-child(even){background:#f8f5e4;}
+  tbody tr:hover{
+    background:#fef9c3;
+    outline:3px solid var(--ink);
+    outline-offset:-3px;
+  }
   tbody tr.hidden{display:none;}
-  td{padding:.65rem 1rem;font-size:.88rem;}
-  td.num{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);width:44px;}
-  .diff-badge{display:inline-block;padding:.2rem .55rem;border-radius:4px;font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
-  .diff-easy{background:rgba(34,197,94,.15);color:var(--easy);}
-  .diff-medium{background:rgba(59,130,246,.15);color:var(--medium);}
-  .diff-hard{background:rgba(249,115,22,.15);color:var(--hard);}
-  .diff-vhard{background:rgba(239,68,68,.15);color:var(--vhard);}
-  .lc-link{display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;font-family:'Space Mono',monospace;font-size:.73rem;padding:.18rem .55rem;border-radius:4px;transition:all .2s;}
-  .lc-link.lc{color:var(--accent);border:1px solid rgba(167,139,250,.3);}
-  .lc-link.lc:hover{background:rgba(167,139,250,.1);border-color:var(--accent);}
-  .pb{font-size:.6rem;font-weight:700;padding:.1rem .3rem;border-radius:3px;letter-spacing:.04em;}
-  .pb-lc{background:rgba(167,139,250,.2);color:var(--accent);}
-  .topic-tag{display:inline-block;background:rgba(255,255,255,.05);color:var(--muted);border-radius:3px;padding:.1rem .4rem;font-size:.68rem;font-family:'Space Mono',monospace;}
-  @media(max-width:700px){td.topic,th.topic{display:none;}input[type="text"]{width:100%;}}
+
+  td{padding:.65rem 1rem;font-size:.9rem;font-family:'Comic Neue',cursive;}
+  td.num{
+    font-family:'Bangers',cursive;font-size:1.1rem;
+    color:#94a3b8;width:52px;text-align:center;
+    border-right:2px solid #e2e8f0;
+  }
+
+  /* problem name bold */
+  tbody td:nth-child(2){font-weight:700;font-size:.95rem;}
+
+  .diff-badge{
+    display:inline-block;
+    padding:.25rem .65rem;
+    font-family:'Bangers',cursive;font-size:.85rem;
+    letter-spacing:.08em;
+    border:2px solid var(--ink);
+    border-radius:4px;
+    box-shadow:var(--shadow-sm);
+  }
+  .diff-easy{background:var(--easy-bg);color:var(--easy);}
+  .diff-medium{background:var(--medium-bg);color:var(--medium);}
+  .diff-hard{background:var(--hard-bg);color:var(--hard);}
+  .diff-vhard{background:var(--vhard-bg);color:var(--vhard);}
+
+  .lc-link{
+    display:inline-flex;align-items:center;gap:.35rem;
+    text-decoration:none;
+    font-family:'Comic Neue',cursive;font-weight:700;font-size:.8rem;
+    padding:.25rem .65rem;
+    background:#7c3aed;color:#fff;
+    border:2px solid var(--ink);border-radius:4px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .1s,box-shadow .1s;
+  }
+  .lc-link:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #111;}
+  .lc-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+
+  .pb{
+    font-size:.65rem;font-weight:700;padding:.1rem .35rem;
+    border:2px solid var(--ink);border-radius:3px;
+    background:#facc15;color:#111;
+  }
+
+  .topic-tag{
+    display:inline-block;
+    background:#e0e7ff;color:#3730a3;
+    border:2px solid #3730a3;
+    border-radius:999px;
+    padding:.1rem .55rem;font-size:.75rem;
+    font-family:'Comic Neue',cursive;font-weight:700;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:8px;background:#fde68a;}
+  ::-webkit-scrollbar-thumb{background:#111;border-radius:4px;}
+
+  @media(max-width:700px){
+    td.topic,th.topic{display:none;}
+    input[type="text"]{width:100%;}
+  }
 </style>
 </head>
 <body>
 <header>
-  <h1>AlgoExpert → LeetCode</h1>
-  <p>// all 200 problems — every problem has a practice link</p>
+  <h1>AlgoExpert<br>&#x2192; LeetCode</h1>
+  <p>All 200 problems &#x2014; every one has a practice link!</p>
   <div class="legend">
     <div class="legend-item"><div class="dot-lc"></div>LeetCode</div>
   </div>
@@ -62,17 +304,17 @@
 <div class="controls">
   <input type="text" id="search" placeholder="Search problems or topics..." oninput="applyFilters()">
   <button class="filter-btn all active" onclick="setFilter('all',this)">All</button>
-  <button class="filter-btn easy"   onclick="setFilter('Easy',this)">🟩 Easy</button>
-  <button class="filter-btn medium" onclick="setFilter('Medium',this)">🟦 Medium</button>
-  <button class="filter-btn hard"   onclick="setFilter('Hard',this)">🟥 Hard</button>
-  <button class="filter-btn vhard"  onclick="setFilter('Very Hard',this)">⬛ Very Hard</button>
+  <button class="filter-btn easy"   onclick="setFilter('Easy',this)">Easy</button>
+  <button class="filter-btn medium" onclick="setFilter('Medium',this)">Medium</button>
+  <button class="filter-btn hard"   onclick="setFilter('Hard',this)">Hard</button>
+  <button class="filter-btn vhard"  onclick="setFilter('Very Hard',this)">Very Hard</button>
 </div>
 <div class="stats">
   <div class="stat-item">Showing: <span id="countVisible">—</span></div>
-  <div class="stat-item">🟩 Easy: <span id="cEasy">—</span></div>
-  <div class="stat-item">🟦 Medium: <span id="cMed">—</span></div>
-  <div class="stat-item">🟥 Hard: <span id="cHard">—</span></div>
-  <div class="stat-item">⬛ Very Hard: <span id="cVH">—</span></div>
+  <div class="stat-item">Easy: <span id="cEasy">—</span></div>
+  <div class="stat-item">Medium: <span id="cMed">—</span></div>
+  <div class="stat-item">Hard: <span id="cHard">—</span></div>
+  <div class="stat-item">Very Hard: <span id="cVH">—</span></div>
 </div>
 <div class="table-wrap">
   <table>
