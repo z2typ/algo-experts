@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA HQ — Your Coding Arsenal</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --white: #fffef0;
+    --yellow: #FFE600;
+    --red: #FF2D2D;
+    --blue: #1565FF;
+    --green: #00C44F;
+    --orange: #FF8C00;
+    --purple: #9B00FF;
+    --shadow: 5px 5px 0px var(--black);
+    --shadow-lg: 8px 8px 0px var(--black);
+    --border: 3px solid var(--black);
+    --border-thick: 4px solid var(--black);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--white);
+    background-image: radial-gradient(circle, #ccc 1px, transparent 1px);
+    background-size: 20px 20px;
+    font-family: 'Comic Neue', cursive;
+    color: var(--black);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  body.dark {
+    --black: #f0f0f0;
+    --white: #121212;
+    background-color: #121212;
+    background-image: radial-gradient(circle, #333 1px, transparent 1px);
+    color: #f0f0f0;
+  }
+
+  /* ===== TOP NAV ===== */
+  .topnav {
+    background: #0d0d0d;
+    border-bottom: 4px solid var(--yellow);
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topnav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .topnav-brand {
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--yellow);
+  }
+
+  .theme-toggle {
+    background: #0d0d0d;
+    color: var(--yellow);
+    border: 3px solid var(--yellow);
+    border-radius: 50px;
+    padding: 7px 18px;
+    font-family: 'Bangers', cursive;
+    font-size: 15px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--yellow);
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+  }
+
+  .theme-toggle:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 5px 5px 0 var(--yellow);
+  }
+
+  .theme-toggle:active {
+    transform: translate(2px,2px);
+    box-shadow: 1px 1px 0 var(--yellow);
+  }
+
+  .toggle-icon {
+    font-size: 17px;
+    display: inline-block;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--yellow);
+    border-bottom: var(--border-thick);
+    padding: 56px 0 44px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.07) 1.5px, transparent 1.5px);
+    background-size: 14px 14px;
+    pointer-events: none;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 360px; height: 360px;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 12px,
+      rgba(0,0,0,0.04) 12px,
+      rgba(0,0,0,0.04) 14px
+    );
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  .burst {
+    position: absolute;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    padding: 10px 16px;
+    border: 3px solid #0d0d0d;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 #0d0d0d;
+    z-index: 2;
+  }
+
+  .burst-1 {
+    background: var(--red);
+    color: #fffef0;
+    font-size: 19px;
+    top: 28px; right: 70px;
+    transform: rotate(-7deg);
+    animation: wobble 3s ease-in-out infinite;
+  }
+
+  .burst-2 {
+    background: #0d0d0d;
+    color: var(--yellow);
+    font-size: 15px;
+    bottom: 24px; left: 60px;
+    transform: rotate(5deg);
+    animation: wobble 2.5s ease-in-out infinite 0.4s;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-7deg) scale(1); }
+    50% { transform: rotate(-5deg) scale(1.05); }
+  }
+
+  @keyframes wobble2 {
+    0%, 100% { transform: rotate(5deg) scale(1); }
+    50% { transform: rotate(3deg) scale(1.05); }
+  }
+
+  .burst-2 { animation: wobble2 2.5s ease-in-out infinite 0.4s; }
+
+  .header-eyebrow {
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 5px;
+    color: #0d0d0d;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    color: #0d0d0d;
+    -webkit-text-stroke: 2px #0d0d0d;
+    text-shadow: 6px 6px 0 var(--red), 11px 11px 0 rgba(0,0,0,0.12);
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--red);
+    -webkit-text-stroke: 2px #0d0d0d;
+    text-shadow: 6px 6px 0 var(--blue), 11px 11px 0 rgba(0,0,0,0.12);
+  }
+
+  .speech-bubble {
+    position: relative;
+    background: #fffef0;
+    border: var(--border-thick);
+    border-color: #0d0d0d;
+    border-radius: 18px;
+    padding: 14px 22px;
+    margin: 22px auto 0;
+    display: inline-block;
+    max-width: 560px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 5px 5px 0 #0d0d0d;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.35s forwards;
+  }
+
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -22px; left: 50px;
+    border: 11px solid transparent;
+    border-top-color: #0d0d0d;
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -15px; left: 52px;
+    border: 9px solid transparent;
+    border-top-color: #fffef0;
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.85) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* ===== MAIN ===== */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+
+  .section-label {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 3px;
+    background: #0d0d0d;
+    border-radius: 2px;
+  }
+
+  /* ===== CARDS ===== */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+  }
+
+  .card {
+    background: #fffef0;
+    border: var(--border-thick);
+    border-color: #0d0d0d;
+    border-radius: 6px;
+    box-shadow: var(--shadow-lg);
+    text-decoration: none;
+    color: #0d0d0d;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s;
+  }
+
+  .card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 #0d0d0d;
+  }
+
+  .card:active {
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 #0d0d0d;
+  }
+
+  .card-header {
+    padding: 28px 24px 20px;
+    border-bottom: 3px solid #0d0d0d;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1.5px, transparent 1.5px);
+    background-size: 12px 12px;
+    pointer-events: none;
+  }
+
+  .card-tag {
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    letter-spacing: 3px;
+    background: #0d0d0d;
+    color: var(--yellow);
+    padding: 3px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    letter-spacing: 2px;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-sub {
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 8px;
+    opacity: 0.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-body {
+    padding: 20px 24px 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .card-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .pill {
+    font-family: 'Bangers', cursive;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border: 2px solid #0d0d0d;
+    border-radius: 999px;
+    background: #fff;
+  }
+
+  .card-cta {
+    font-family: 'Bangers', cursive;
+    font-size: 17px;
+    letter-spacing: 2px;
+    padding: 11px 0;
+    border: 3px solid #0d0d0d;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 4px 4px 0 #0d0d0d;
+    transition: transform 0.1s, box-shadow 0.1s;
+    margin-top: 4px;
+  }
+
+  .card:hover .card-cta {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #0d0d0d;
+  }
+
+  /* Card accent colours */
+  .card-1 .card-header { background: var(--yellow); }
+  .card-1 .card-cta { background: var(--yellow); }
+
+  .card-2 .card-header { background: #dbeafe; }
+  .card-2 .card-cta { background: #dbeafe; }
+
+  .card-3 .card-header { background: #fce7f3; }
+  .card-3 .card-cta { background: #fce7f3; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: #0d0d0d;
+    border-top: 4px solid var(--yellow);
+    padding: 24px;
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: #666;
+  }
+
+  footer span { color: var(--yellow); }
+
+  /* ===== DARK MODE ===== */
+  body.dark .card {
+    background: #1e1e1e;
+    border-color: #f0f0f0;
+    box-shadow: 8px 8px 0 #f0f0f0;
+    color: #f0f0f0;
+  }
+
+  body.dark .card:hover {
+    box-shadow: 12px 12px 0 #f0f0f0;
+  }
+
+  body.dark .card-header {
+    border-bottom-color: #f0f0f0;
+  }
+
+  body.dark .card-1 .card-header { background: #3a3000; }
+  body.dark .card-2 .card-header { background: #001a3a; }
+  body.dark .card-3 .card-header { background: #3a001a; }
+  body.dark .card-1 .card-cta { background: #3a3000; }
+  body.dark .card-2 .card-cta { background: #001a3a; }
+  body.dark .card-3 .card-cta { background: #3a001a; }
+
+  body.dark .card-tag { background: #f0f0f0; color: #0d0d0d; }
+  body.dark .card-title { color: #f0f0f0; }
+  body.dark .card-cta { border-color: #f0f0f0; box-shadow: 4px 4px 0 #f0f0f0; color: #f0f0f0; }
+  body.dark .pill { border-color: #f0f0f0; background: #2a2a2a; color: #f0f0f0; }
+  body.dark .section-label::after { background: #f0f0f0; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .burst-1 { right: 16px; font-size: 14px; }
+    .burst-2 { left: 12px; font-size: 12px; }
+    .cards { grid-template-columns: 1fr; }
+    header { padding: 40px 16px 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <span class="topnav-brand">DSA HQ</span>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+      <span class="toggle-icon" id="toggleIcon">☀️</span>
+      <span id="toggleLabel">LIGHT MODE</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <div class="burst burst-1">POW!</div>
+  <div class="burst burst-2">LEVEL UP!</div>
+
+  <p class="header-eyebrow">WELCOME TO</p>
+  <h1>DSA <em>HQ</em></h1>
+
+  <div class="speech-bubble">
+    Your one-stop arsenal for cracking coding interviews — patterns, problems &amp; pro-level prep!
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <p class="section-label">CHOOSE YOUR MISSION</p>
+
+  <div class="cards">
+
+    <!-- Card 1: AlgoExpert -->
+    <a href="algo-experts.html" class="card card-1">
+      <div class="card-header">
+        <div class="card-tag">PROBLEMS</div>
+        <div class="card-title">AlgoExpert<br>to LeetCode</div>
+        <div class="card-sub">Complete mapping guide</div>
+      </div>
+      <div class="card-body">
+        <p class="card-desc">
+          Every AlgoExpert problem mapped to its LeetCode equivalent — with difficulty ratings and direct links. Stop searching, start solving.
+        </p>
+        <div class="card-pills">
+          <span class="pill">Easy</span>
+          <span class="pill">Medium</span>
+          <span class="pill">Hard</span>
+          <span class="pill">Very Hard</span>
+        </div>
+        <div class="card-cta">GO TO PROBLEMS &rarr;</div>
+      </div>
+    </a>
+
+    <!-- Card 2: Coding Patterns -->
+    <a href="coding-patterns.html" class="card card-2">
+      <div class="card-header">
+        <div class="card-tag">PATTERNS</div>
+        <div class="card-title">Coding<br>Patterns</div>
+        <div class="card-sub">The essential playbook</div>
+      </div>
+      <div class="card-body">
+        <p class="card-desc">
+          Master the core patterns that unlock 90% of interview problems. Sliding window, two pointers, BFS/DFS, dynamic programming &amp; more.
+        </p>
+        <div class="card-pills">
+          <span class="pill">Sliding Window</span>
+          <span class="pill">Two Pointers</span>
+          <span class="pill">BFS / DFS</span>
+          <span class="pill">DP</span>
+        </div>
+        <div class="card-cta">STUDY PATTERNS &rarr;</div>
+      </div>
+    </a>
+
+    <!-- Card 3: Advanced Patterns -->
+    <a href="advanced-patterns.html" class="card card-3">
+      <div class="card-header">
+        <div class="card-tag">ADVANCED</div>
+        <div class="card-title">Advanced<br>Patterns</div>
+        <div class="card-sub">FAANG Edition</div>
+      </div>
+      <div class="card-body">
+        <p class="card-desc">
+          Elite-level patterns for the hardest interview questions. Segment trees, monotonic stacks, tries, union-find, and system design tricks.
+        </p>
+        <div class="card-pills">
+          <span class="pill">Segment Tree</span>
+          <span class="pill">Trie</span>
+          <span class="pill">Union Find</span>
+          <span class="pill">Mono Stack</span>
+        </div>
+        <div class="card-cta">GO ADVANCED &rarr;</div>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  Built for <span>grinders</span> &mdash; good luck out there!
+</footer>
+
+<script>
+  function toggleTheme() {
+    const dark = document.body.classList.toggle('dark');
+    document.getElementById('toggleIcon').textContent = dark ? '🌙' : '☀️';
+    document.getElementById('toggleLabel').textContent = dark ? 'DARK MODE' : 'LIGHT MODE';
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  }
+
+  // Restore saved theme
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+    document.getElementById('toggleIcon').textContent = '🌙';
+    document.getElementById('toggleLabel').textContent = 'DARK MODE';
+  }
+</script>
+
+</body>
+</html>
