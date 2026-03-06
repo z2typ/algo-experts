@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Patterns — FAANG Edition!</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --white: #fff8f0;
+    --primary: #FFE600;
+    --yellow: #FFE600;
+    --red: #FF2D2D;
+    --blue: #00CFFF;
+    --green: #00FF9C;
+    --orange: #FF8C00;
+    --purple: #C400FF;
+    --shadow: 5px 5px 0px var(--black);
+    --shadow-lg: 7px 7px 0px var(--black);
+    --border: 3px solid var(--black);
+    --border-thick: 4px solid var(--black);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--white);
+    background-image: radial-gradient(circle, #ddd 1px, transparent 1px);
+    background-size: 20px 20px;
+    font-family: 'Comic Neue', cursive;
+    color: var(--black);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  /* ===== TOP NAV ===== */
+  .topnav {
+    background: var(--black);
+    border-bottom: 4px solid var(--primary);
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .topnav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .topnav-brand {
+    font-family: 'Bangers', cursive;
+    font-size: 17px;
+    letter-spacing: 2px;
+    color: var(--yellow);
+  }
+
+  .topnav-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .back-btn {
+    font-family: 'Bangers', cursive;
+    font-size: 15px;
+    letter-spacing: 1px;
+    background: transparent;
+    border: 2px solid #444;
+    color: #aaa;
+    border-radius: 6px;
+    padding: 5px 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s;
+  }
+
+  .back-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .theme-toggle {
+    background: var(--black);
+    color: var(--primary);
+    border: 3px solid var(--primary);
+    border-radius: 50px;
+    padding: 8px 18px;
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--primary);
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s, background 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .theme-toggle:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 5px 5px 0 var(--primary);
+  }
+
+  .theme-toggle:active {
+    transform: translate(2px,2px);
+    box-shadow: 1px 1px 0 var(--primary);
+  }
+
+  .toggle-icon {
+    font-size: 18px;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    display: inline-block;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--yellow);
+    border-bottom: var(--border-thick);
+    padding: 40px 0 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1.5px, transparent 1.5px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
+
+  /* Diagonal speed lines */
+  header::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 340px; height: 340px;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 12px,
+      rgba(0,0,0,0.05) 12px,
+      rgba(0,0,0,0.05) 14px
+    );
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  .burst {
+    position: absolute;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    padding: 10px 16px;
+    border: 3px solid var(--black);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--black);
+    z-index: 2;
+  }
+
+  .burst-1 {
+    background: var(--red);
+    color: var(--white);
+    font-size: 20px;
+    top: 24px; right: 60px;
+    transform: rotate(-6deg);
+    animation: wobble 3s ease-in-out infinite;
+  }
+
+  .burst-2 {
+    background: var(--blue);
+    color: var(--black);
+    font-size: 15px;
+    bottom: 20px; right: 210px;
+    transform: rotate(4deg);
+    animation: wobble 2.5s ease-in-out infinite 0.6s;
+  }
+
+  .burst-3 {
+    background: var(--green);
+    color: var(--black);
+    font-size: 13px;
+    top: 18px; right: 280px;
+    transform: rotate(-3deg);
+    animation: wobble 4s ease-in-out infinite 1s;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-6deg) scale(1); }
+    50% { transform: rotate(-4deg) scale(1.05); }
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header-eyebrow {
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    letter-spacing: 5px;
+    color: var(--black);
+    margin-bottom: 10px;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 0.92;
+    letter-spacing: 3px;
+    color: var(--black);
+    -webkit-text-stroke: 1px var(--black);
+    text-shadow: 6px 6px 0 var(--red), 10px 10px 0 rgba(0,0,0,0.15);
+    opacity: 0;
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--red);
+    -webkit-text-stroke: 1px var(--black);
+    text-shadow: 6px 6px 0 var(--blue), 10px 10px 0 rgba(0,0,0,0.15);
+  }
+
+  .warning-bubble {
+    position: relative;
+    background: var(--white);
+    border: 4px solid var(--black);
+    border-radius: 18px;
+    padding: 14px 20px;
+    margin-top: 20px;
+    display: inline-block;
+    max-width: 580px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.35s forwards;
+  }
+
+  .warning-bubble::before {
+    content: '';
+    position: absolute;
+    top: -20px; left: 40px;
+    border: 10px solid transparent;
+    border-bottom-color: var(--black);
+  }
+
+  .warning-bubble::after {
+    content: '';
+    position: absolute;
+    top: -13px; left: 41px;
+    border: 9px solid transparent;
+    border-bottom-color: var(--white);
+  }
+
+  .warning-bubble strong { color: var(--red); }
+
+  /* ===== SEARCH ===== */
+  .search-area {
+    padding: 28px 0 0;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.45s forwards;
+  }
+
+  .search-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+  }
+
+  .search-input {
+    background: var(--white);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    padding: 12px 16px 12px 44px;
+    font-family: 'Comic Neue', cursive;
+    font-size: 15px;
+    font-weight: 700;
+    width: 380px;
+    max-width: 100%;
+    outline: none;
+    color: var(--black);
+    box-shadow: 4px 4px 0 var(--black);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .search-input::placeholder { color: #888; }
+
+  .search-input:focus {
+    transform: translate(-2px,-2px);
+    box-shadow: 6px 6px 0 var(--black);
+  }
+
+  /* ===== FILTERS ===== */
+  .filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 28px 0 24px;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) 0.5s forwards;
+  }
+
+  .filter-btn {
+    font-family: 'Bangers', cursive;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    background: var(--white);
+    border: var(--border);
+    border-radius: 6px;
+    padding: 6px 18px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--black);
+    transition: transform 0.1s, box-shadow 0.1s, background 0.2s, color 0.2s;
+    color: var(--black);
+  }
+
+  .filter-btn:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 5px 5px 0 var(--black);
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .filter-btn:active {
+    transform: translate(2px,2px);
+    box-shadow: 1px 1px 0 var(--black);
+  }
+
+  .filter-btn.active {
+    background: var(--primary);
+    color: var(--black);
+    border-color: var(--black);
+    box-shadow: 4px 4px 0 var(--purple);
+  }
+
+  /* ===== GRID ===== */
+  .patterns-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    padding-bottom: 60px;
+  }
+
+  /* ===== CARD ===== */
+  .pattern-card {
+    background: var(--white);
+    border: var(--border-thick);
+    border-radius: 14px;
+    padding: 26px;
+    cursor: pointer;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s, background 0.3s;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+
+  /* Speed-line diagonal slash accent */
+  .pattern-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 10px;
+    background: var(--card-color, var(--primary));
+    border-bottom: 3px solid var(--black);
+  }
+
+  .pattern-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; right: -30px;
+    width: 100px; height: 100px;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 6px,
+      rgba(0,0,0,0.04) 6px,
+      rgba(0,0,0,0.04) 8px
+    );
+    pointer-events: none;
+    border-radius: 4px;
+  }
+
+  .pattern-card:hover {
+    transform: translate(-4px,-4px) rotate(-0.5deg);
+    box-shadow: 11px 11px 0 var(--black);
+  }
+
+  .pattern-card:active {
+    transform: translate(2px,2px);
+    box-shadow: 3px 3px 0 var(--black);
+  }
+
+  .card-number {
+    font-family: 'Bangers', cursive;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #aaa;
+    margin-top: 4px;
+    margin-bottom: 8px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .card-title {
+    font-family: 'Bangers', cursive;
+    font-size: 24px;
+    letter-spacing: 1.5px;
+    line-height: 1.1;
+    color: var(--black);
+  }
+
+  .difficulty {
+    font-family: 'Bangers', cursive;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border: 2px solid var(--black);
+    border-radius: 4px;
+    box-shadow: 2px 2px 0 var(--black);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .diff-hard { background: var(--red); color: var(--white); }
+  .diff-expert { background: var(--primary); color: var(--black); }
+  .diff-legendary { background: var(--purple); color: var(--white); }
+
+  .card-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #333;
+    margin-bottom: 14px;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .tag {
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--black);
+    border: 2px solid var(--black);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--primary);
+    color: var(--black);
+  }
+
+  .card-examples {
+    font-size: 12px;
+    color: #666;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-examples span {
+    color: var(--purple);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--white);
+    border: var(--border-thick);
+    border-radius: 16px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: 10px 10px 0 var(--black);
+    transform: scale(0.85) rotate(-1deg);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s;
+    position: relative;
+  }
+
+  .modal-overlay.open .modal { transform: scale(1) rotate(0deg); }
+
+  .modal-header {
+    background: var(--modal-color, var(--primary));
+    border-bottom: var(--border-thick);
+    padding: 24px 28px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .modal-header-num {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: rgba(0,0,0,0.45);
+    margin-bottom: 4px;
+  }
+
+  .modal-header-title {
+    font-family: 'Bangers', cursive;
+    font-size: 34px;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--black);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+    padding-right: 52px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: var(--black);
+    border: 3px solid var(--white);
+    color: var(--white);
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+
+  .modal-close:hover {
+    transform: translate(-2px,-2px) rotate(-8deg);
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.4);
+  }
+
+  .modal-body { padding: 28px; }
+
+  .modal-section { margin-bottom: 28px; }
+
+  .modal-section-title {
+    font-family: 'Bangers', cursive;
+    font-size: 17px;
+    letter-spacing: 2px;
+    color: var(--white);
+    background: var(--black);
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+    box-shadow: 3px 3px 0 var(--modal-color, var(--primary));
+  }
+
+  .modal-section p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .complexity-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .complexity-item {
+    background: var(--black);
+    color: var(--primary);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    box-shadow: 4px 4px 0 var(--modal-color, var(--primary));
+  }
+
+  .complexity-label {
+    font-family: 'Bangers', cursive;
+    font-size: 10px;
+    letter-spacing: 2px;
+    opacity: 0.55;
+  }
+
+  .complexity-value {
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+
+  .steps-list { list-style: none; counter-reset: steps; }
+
+  .steps-list li {
+    counter-increment: steps;
+    font-size: 13px;
+    line-height: 1.65;
+    padding: 10px 12px 10px 48px;
+    border: 2px solid var(--black);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: var(--white);
+    position: relative;
+    box-shadow: 3px 3px 0 var(--black);
+    font-weight: 700;
+    transition: background 0.3s;
+  }
+
+  .steps-list li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 36px;
+    background: var(--black);
+    color: var(--primary);
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px 0 0 6px;
+    letter-spacing: 1px;
+  }
+
+  /* Insight box */
+  .insight-box {
+    background: #fffbe0;
+    border: 2px solid var(--black);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.7;
+    color: #332200;
+    box-shadow: 3px 3px 0 var(--black);
+    margin-top: 12px;
+  }
+
+  .insight-box strong { color: var(--red); }
+
+  /* Code block */
+  .code-wrapper { position: relative; }
+
+  .code-block {
+    background: #0d0d1a;
+    border: var(--border-thick);
+    border-radius: 10px;
+    padding: 44px 20px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.9;
+    overflow-x: auto;
+    white-space: pre;
+    tab-size: 4;
+    box-shadow: 5px 5px 0 var(--black);
+    color: #e8e8f0;
+  }
+
+  .code-block .comment { color: #6272a4; font-style: italic; }
+  .code-block .keyword { color: #ff79c6; font-weight: bold; }
+  .code-block .func { color: #50fa7b; }
+  .code-block .str { color: #f1fa8c; }
+  .code-block .num { color: #bd93f9; }
+  .code-block .type { color: #8be9fd; }
+
+  .copy-btn {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--primary);
+    border: 2px solid var(--black);
+    color: var(--black);
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--black);
+    transition: transform 0.1s, box-shadow 0.1s;
+    z-index: 1;
+  }
+
+  .copy-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--black); }
+  .copy-btn.copied { background: var(--green); color: var(--black); }
+
+  .use-cases { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .use-case-chip {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    background: var(--white);
+    border: 2px solid var(--black);
+    border-radius: 6px;
+    box-shadow: 3px 3px 0 var(--black);
+    cursor: default;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+  }
+
+  .use-case-chip:hover {
+    transform: translate(-2px,-2px);
+    box-shadow: 5px 5px 0 var(--black);
+    background: var(--primary);
+  }
+
+  /* Companies badge strip */
+  .companies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .company-badge {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 2px solid var(--black);
+    box-shadow: 2px 2px 0 var(--black);
+  }
+
+  .co-google   { background: #4285F4; color: white; }
+  .co-meta     { background: #0082FB; color: white; }
+  .co-amazon   { background: #FF9900; color: black; }
+  .co-apple    { background: #555; color: white; }
+  .co-netflix  { background: #E50914; color: white; }
+  .co-uber     { background: #000; color: white; border-color: #555; }
+  .co-microsoft{ background: #00A4EF; color: black; }
+  .co-stripe   { background: #635BFF; color: white; }
+
+  /* Empty state */
+  .empty {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 80px 20px;
+    font-family: 'Bangers', cursive;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: #bbb;
+  }
+
+  /* Footer */
+  footer {
+    border-top: var(--border-thick);
+    background: var(--black);
+    border-top-color: var(--primary);
+    padding: 20px 0;
+    transition: background 0.3s;
+  }
+
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer .footer-text {
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--primary);
+  }
+
+  .stat-badge {
+    background: var(--yellow);
+    border: 3px solid var(--black);
+    border-radius: 8px;
+    padding: 6px 18px;
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--black);
+    box-shadow: 4px 4px 0 var(--red);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.7) rotate(-3deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  /* ===== DARK THEME ===== */
+  body.dark {
+    background-color: #111108;
+    background-image: radial-gradient(circle, #2a2a10 1px, transparent 1px);
+    color: #f5f0d0;
+  }
+
+  body.dark .topnav { background: #0a0a02; border-bottom-color: var(--yellow); }
+
+  body.dark header { background: #111108; }
+  body.dark header::before {
+    background-image: radial-gradient(circle, rgba(255,230,0,0.1) 1.5px, transparent 1.5px);
+  }
+
+  body.dark h1 { color: #fff; -webkit-text-stroke: 1px var(--yellow); }
+
+  body.dark .warning-bubble {
+    background: #1a1800;
+    border-color: var(--yellow);
+    color: #fff5cc;
+    box-shadow: 5px 5px 0 var(--orange);
+  }
+
+  body.dark .warning-bubble::before { border-bottom-color: var(--yellow); }
+  body.dark .warning-bubble::after { border-bottom-color: #1a1800; }
+  body.dark .warning-bubble strong { color: var(--yellow); }
+
+  body.dark .search-input {
+    background: #1a1800;
+    border-color: var(--yellow);
+    color: #fff5cc;
+    box-shadow: 4px 4px 0 var(--orange);
+  }
+
+  body.dark .search-input::placeholder { color: #665500; }
+
+  body.dark .filter-btn {
+    background: #1a1800;
+    border-color: #443300;
+    color: #ccaa00;
+    box-shadow: 3px 3px 0 #443300;
+  }
+
+  body.dark .filter-btn:hover {
+    border-color: var(--yellow);
+    color: var(--yellow);
+    box-shadow: 4px 4px 0 var(--yellow);
+  }
+
+  body.dark .filter-btn.active {
+    background: var(--yellow);
+    color: #000;
+    border-color: #000;
+    box-shadow: 4px 4px 0 var(--orange);
+  }
+
+  body.dark .pattern-card {
+    background: #181600;
+    border-color: #443300;
+    box-shadow: 7px 7px 0 #443300;
+  }
+
+  body.dark .pattern-card:hover {
+    border-color: var(--yellow);
+    box-shadow: 11px 11px 0 var(--yellow);
+  }
+
+  body.dark .card-title { color: #fff5cc; }
+  body.dark .card-desc { color: #aa9944; }
+  body.dark .card-number { color: #554400; }
+  body.dark .card-examples { color: #887733; }
+  body.dark .card-examples span { color: #ffdd44; }
+  body.dark .tag { border-color: #443300; color: #000; }
+
+  body.dark .difficulty { border-color: #443300; box-shadow: 2px 2px 0 #443300; }
+
+  body.dark .modal {
+    background: #111100;
+    border-color: #443300;
+    box-shadow: 10px 10px 0 var(--yellow);
+  }
+
+  body.dark .modal-body { background: #111100; }
+  body.dark .modal-section p { color: #ccbb88; }
+
+  body.dark .steps-list li {
+    background: #1a1800;
+    border-color: #443300;
+    color: #e8d890;
+    box-shadow: 3px 3px 0 #443300;
+  }
+
+  body.dark .insight-box {
+    background: #1a1800;
+    border-color: var(--yellow);
+    color: #fff0aa;
+    box-shadow: 3px 3px 0 var(--orange);
+  }
+
+  body.dark .use-case-chip {
+    background: #1a1800;
+    border-color: #443300;
+    color: #e8d890;
+    box-shadow: 3px 3px 0 #443300;
+  }
+
+  body.dark .use-case-chip:hover {
+    background: var(--yellow);
+    color: #000;
+    border-color: #000;
+    box-shadow: 4px 4px 0 var(--orange);
+  }
+
+  body.dark footer {
+    background: #0a0a02;
+    border-top-color: var(--yellow);
+  }
+
+  body.dark .theme-toggle {
+    background: var(--yellow);
+    color: #000;
+    border-color: #000;
+    box-shadow: 3px 3px 0 #000;
+  }
+
+  body.dark ::-webkit-scrollbar-track { background: #111108; }
+  body.dark ::-webkit-scrollbar-thumb { background: #443300; }
+
+  /* Transitions */
+  body, header, .pattern-card, .modal, .filter-btn, .search-input, .warning-bubble, footer, .tag, .steps-list li, .use-case-chip, .insight-box {
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--white); border-left: 2px solid #ddd; }
+  ::-webkit-scrollbar-thumb { background: var(--black); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="container topnav-inner">
+    <span class="topnav-brand">☠️ ADVANCED PATTERNS — FAANG EDITION</span>
+    <div class="topnav-links">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span class="toggle-icon" id="toggleIcon">🌙</span>
+        <span id="toggleLabel">DARK MODE</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HEADER -->
+<header>
+  <div class="burst burst-1">💀 HARD MODE!</div>
+  <div class="burst burst-2">🧠 FAANG ONLY!</div>
+  <div class="burst burst-3">🔥 ELITE!</div>
+  <div class="container">
+    <div class="header-eyebrow">★ LEVEL UP YOUR CODING INTERVIEW ★</div>
+    <h1>ADVANCED<br><em>PATTERNS!</em></h1>
+    <div class="warning-bubble">
+      ⚠️ WARNING: These <strong>15 elite patterns</strong> are the hardest algorithms asked at Google, Meta, Amazon & Netflix. Not for the faint of heart! 💀
+    </div>
+    <div class="search-area">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search advanced patterns..." />
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">☠️ ALL</button>
+    <button class="filter-btn" data-filter="hard">🔴 HARD</button>
+    <button class="filter-btn" data-filter="expert">💜 EXPERT</button>
+    <button class="filter-btn" data-filter="legendary">⭐ LEGENDARY</button>
+    <button class="filter-btn" data-filter="graphs">🕸️ GRAPHS</button>
+    <button class="filter-btn" data-filter="dp">🧠 DP</button>
+    <button class="filter-btn" data-filter="trees">🌳 TREES</button>
+    <button class="filter-btn" data-filter="strings">📝 STRINGS</button>
+    <button class="filter-btn" data-filter="math">🔢 MATH</button>
+  </div>
+
+  <div class="patterns-grid" id="grid"></div>
+</div>
+
+<footer>
+  <div class="container">
+    <span class="footer-text">💀 ADVANCED PATTERNS UNIVERSE — ISSUE #2</span>
+    <div class="stat-badge">⚡ <span id="visibleCount">15</span> PATTERNS</div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-header" id="modalHeader">
+      <div class="modal-header-num" id="modalNumber"></div>
+      <div class="modal-header-title" id="modalTitle"></div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const CARD_COLORS = ['#FF3EA5','#C400FF','#00CFFF','#FF2D2D','#FF8C00','#00FF9C','#FFE600','#FF3EA5','#00CFFF','#C400FF','#FF8C00','#00FF9C','#FF2D2D','#FFE600','#FF3EA5'];
+
+const patterns = [
+  {
+    id: 1,
+    title: "Segment Tree",
+    difficulty: "expert",
+    categories: ["trees"],
+    desc: "A binary tree structure over an array that answers range queries (sum, min, max) and supports point/range updates in O(log n).",
+    tags: ["Tree", "Range Query", "Array"],
+    examples: "Range Sum Query, Range Min Query, Lazy Propagation",
+    timeComplexity: "O(log n)",
+    spaceComplexity: "O(n)",
+    companies: ["google","meta","amazon"],
+    insight: "Segment trees power competitive programming range problems. Lazy propagation extends them to O(log n) range updates.",
+    when: [
+      "Range queries (sum/min/max) with point updates on arrays.",
+      "Range updates with lazy propagation.",
+      "Finding k-th smallest element in a range.",
+      "Interval stabbing, merging or counting problems."
+    ],
+    steps: [
+      "Build: Recursively fill tree[node] = tree[2n] op tree[2n+1], leaves hold arr[i].",
+      "Query: Recurse left/right child if segment overlaps query range; combine results.",
+      "Update: Walk down to leaf index, update leaf, propagate changes upward.",
+      "Lazy: Store pending updates in lazy[]; push down before accessing children."
+    ],
+    useCases: ["Range Sum Query Mutable", "Range Min Query", "Count of Smaller Numbers After Self", "My Calendar III", "The Skyline Problem"],
+    code: `<span class="keyword">class</span> <span class="func">SegTree</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, n):
+        self.n = n
+        self.tree = [<span class="num">0</span>] * (<span class="num">4</span> * n)
+
+    <span class="keyword">def</span> <span class="func">update</span>(self, node, start, end, idx, val):
+        <span class="keyword">if</span> start == end:
+            self.tree[node] = val; <span class="keyword">return</span>
+        mid = (start + end) // <span class="num">2</span>
+        <span class="keyword">if</span> idx <= mid:
+            self.update(<span class="num">2</span>*node, start, mid, idx, val)
+        <span class="keyword">else</span>:
+            self.update(<span class="num">2</span>*node+<span class="num">1</span>, mid+<span class="num">1</span>, end, idx, val)
+        self.tree[node] = self.tree[<span class="num">2</span>*node] + self.tree[<span class="num">2</span>*node+<span class="num">1</span>]
+
+    <span class="keyword">def</span> <span class="func">query</span>(self, node, start, end, l, r):
+        <span class="keyword">if</span> r < start <span class="keyword">or</span> end < l: <span class="keyword">return</span> <span class="num">0</span>
+        <span class="keyword">if</span> l <= start <span class="keyword">and</span> end <= r: <span class="keyword">return</span> self.tree[node]
+        mid = (start + end) // <span class="num">2</span>
+        <span class="keyword">return</span> (self.query(<span class="num">2</span>*node, start, mid, l, r) +
+                self.query(<span class="num">2</span>*node+<span class="num">1</span>, mid+<span class="num">1</span>, end, l, r))`
+  },
+  {
+    id: 2,
+    title: "Dijkstra's Algorithm",
+    difficulty: "hard",
+    categories: ["graphs"],
+    desc: "Shortest path from a source to all nodes in a weighted graph with non-negative edges, using a min-heap for O((V+E) log V).",
+    tags: ["Graph", "Heap", "Greedy"],
+    examples: "Network Delay Time, Cheapest Flights Within K Stops, Path With Minimum Effort",
+    timeComplexity: "O((V+E) log V)",
+    spaceComplexity: "O(V+E)",
+    companies: ["google","uber","amazon","meta"],
+    insight: "The go-to algorithm for GPS, game pathfinding, and network routing. Fails with negative edges — use Bellman-Ford instead.",
+    when: [
+      "Single-source shortest path in weighted graphs with non-negative edges.",
+      "Minimum cost to reach all nodes from a source.",
+      "Modified shortest path (e.g. k stops, max probability).",
+      "Whenever BFS isn't enough because edges have different weights."
+    ],
+    steps: [
+      "Initialize dist[src]=0, dist[all others]=∞; push (0, src) to min-heap.",
+      "Pop minimum (cost, node). If cost > dist[node], skip (stale entry).",
+      "For each neighbor, if dist[node]+weight < dist[neighbor], update and push to heap.",
+      "Repeat until heap is empty. dist[] holds shortest paths from src."
+    ],
+    useCases: ["Network Delay Time", "Path With Min Effort", "Cheapest Flights K Stops", "Swim in Rising Water", "Find the City With Smallest Neighbors"],
+    code: `<span class="keyword">import</span> heapq
+
+<span class="keyword">def</span> <span class="func">dijkstra</span>(n, edges, src):
+    graph = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> range(n)]
+    <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:
+        graph[u].append((v, w))
+
+    dist = [float(<span class="str">'inf'</span>)] * n
+    dist[src] = <span class="num">0</span>
+    heap = [(<span class="num">0</span>, src)]  <span class="comment"># (cost, node)</span>
+
+    <span class="keyword">while</span> heap:
+        cost, u = heapq.heappop(heap)
+        <span class="keyword">if</span> cost > dist[u]: <span class="keyword">continue</span>  <span class="comment"># stale</span>
+
+        <span class="keyword">for</span> v, w <span class="keyword">in</span> graph[u]:
+            nc = cost + w
+            <span class="keyword">if</span> nc < dist[v]:
+                dist[v] = nc
+                heapq.heappush(heap, (nc, v))
+
+    <span class="keyword">return</span> dist`
+  },
+  {
+    id: 3,
+    title: "Bellman-Ford / SPFA",
+    difficulty: "expert",
+    categories: ["graphs"],
+    desc: "Shortest path supporting negative-weight edges. Detects negative cycles. SPFA is a queue-optimized variant.",
+    tags: ["Graph", "DP", "Negative Edges"],
+    examples: "Cheapest Flights Within K Stops, Bellman-Ford Negative Cycle",
+    timeComplexity: "O(VE)",
+    spaceComplexity: "O(V)",
+    companies: ["google","amazon"],
+    insight: "Critical when edges can be negative — Dijkstra will fail silently. Used in financial arbitrage detection.",
+    when: [
+      "Graph has negative edge weights.",
+      "Need to detect negative cycles.",
+      "Constrained shortest path (at most k edges).",
+      "Currency arbitrage or financial flow problems."
+    ],
+    steps: [
+      "Initialize dist[src]=0, dist[others]=∞.",
+      "Relax ALL edges V-1 times: for each edge (u,v,w), if dist[u]+w < dist[v], update dist[v].",
+      "On the V-th iteration, if any dist still updates, a negative cycle exists.",
+      "For k-stop variant: run exactly k relaxation rounds with a copy of previous dist."
+    ],
+    useCases: ["Cheapest Flights K Stops", "Negative Cycle Detection", "Minimum Cost to Reach Destination", "Currency Arbitrage"],
+    code: `<span class="keyword">def</span> <span class="func">bellman_ford</span>(n, edges, src):
+    dist = [float(<span class="str">'inf'</span>)] * n
+    dist[src] = <span class="num">0</span>
+
+    <span class="keyword">for</span> _ <span class="keyword">in</span> range(n - <span class="num">1</span>):  <span class="comment"># V-1 rounds</span>
+        <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:
+            <span class="keyword">if</span> dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+
+    <span class="comment"># V-th pass: detect negative cycle</span>
+    <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges:
+        <span class="keyword">if</span> dist[u] + w < dist[v]:
+            <span class="keyword">return None</span>  <span class="comment"># negative cycle!</span>
+
+    <span class="keyword">return</span> dist`
+  },
+  {
+    id: 4,
+    title: "Floyd-Warshall",
+    difficulty: "expert",
+    categories: ["graphs"],
+    desc: "All-pairs shortest path via DP. O(V³) but handles negative edges. Classic 'intermediary node' DP.",
+    tags: ["Graph", "DP", "All-Pairs"],
+    examples: "Find the City With Smallest Neighbors, Transitive Closure",
+    timeComplexity: "O(V³)",
+    spaceComplexity: "O(V²)",
+    companies: ["google","meta"],
+    insight: "Perfect when you need shortest paths between ALL pairs of nodes. The recurrence dist[i][j] = min(dist[i][j], dist[i][k]+dist[k][j]) is elegant and powerful.",
+    when: [
+      "Need shortest path between every pair of nodes.",
+      "Dense graphs where V is small (≤ 500).",
+      "Detecting negative cycles in directed graphs.",
+      "Transitive closure of a relation."
+    ],
+    steps: [
+      "Initialize dist[i][j] = edge weight if edge exists, 0 if i==j, ∞ otherwise.",
+      "For each intermediate node k (0 to V-1):",
+      "  For each pair (i,j): dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]).",
+      "If dist[i][i] < 0 for any i, a negative cycle exists."
+    ],
+    useCases: ["All Pairs Shortest Path", "Transitive Closure", "Find City With Smallest Neighbors", "Reachability Matrix"],
+    code: `<span class="keyword">def</span> <span class="func">floyd_warshall</span>(n, edges):
+    INF = float(<span class="str">'inf'</span>)
+    dist = [[INF] * n <span class="keyword">for</span> _ <span class="keyword">in</span> range(n)]
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(n): dist[i][i] = <span class="num">0</span>
+    <span class="keyword">for</span> u, v, w <span class="keyword">in</span> edges: dist[u][v] = w
+
+    <span class="keyword">for</span> k <span class="keyword">in</span> range(n):       <span class="comment"># intermediary</span>
+        <span class="keyword">for</span> i <span class="keyword">in</span> range(n):
+            <span class="keyword">for</span> j <span class="keyword">in</span> range(n):
+                <span class="keyword">if</span> dist[i][k] + dist[k][j] < dist[i][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+
+    <span class="keyword">return</span> dist`
+  },
+  {
+    id: 5,
+    title: "Minimum Spanning Tree",
+    difficulty: "hard",
+    categories: ["graphs"],
+    desc: "Kruskal's (sort edges + DSU) and Prim's (greedy + heap) both find the minimum-weight tree spanning all nodes.",
+    tags: ["Graph", "Greedy", "Union-Find"],
+    examples: "Min Cost to Connect All Points, Optimize Water Distribution",
+    timeComplexity: "O(E log E)",
+    spaceComplexity: "O(V)",
+    companies: ["google","amazon","meta"],
+    insight: "Kruskal is cleaner for sparse graphs; Prim is faster for dense ones. Both appear disguised in connection/network cost problems.",
+    when: [
+      "Connecting all nodes with minimum total edge weight.",
+      "Network infrastructure cost minimization.",
+      "Cluster analysis and approximate TSP.",
+      "Any problem asking for minimum cost to make graph fully connected."
+    ],
+    steps: [
+      "Kruskal: Sort all edges by weight. Use DSU — greedily add edge if it doesn't form a cycle.",
+      "Stop when V-1 edges have been added.",
+      "Prim: Start from any node; use min-heap of (weight, neighbor). Greedily pick min edge to unvisited node.",
+      "Both produce MST with total weight = sum of selected edges."
+    ],
+    useCases: ["Min Cost Connect All Points", "Optimize Water Distribution", "Remove Max Edges to Keep Graph Traversable", "Critical Connections"],
+    code: `<span class="keyword">import</span> heapq
+
+<span class="keyword">def</span> <span class="func">prim_mst</span>(n, adj):
+    <span class="comment"># adj[u] = list of (weight, v)</span>
+    visited = set()
+    heap = [(<span class="num">0</span>, <span class="num">0</span>)]   <span class="comment"># (cost, node)</span>
+    total = <span class="num">0</span>
+
+    <span class="keyword">while</span> heap <span class="keyword">and</span> len(visited) < n:
+        cost, u = heapq.heappop(heap)
+        <span class="keyword">if</span> u <span class="keyword">in</span> visited: <span class="keyword">continue</span>
+        visited.add(u)
+        total += cost
+        <span class="keyword">for</span> w, v <span class="keyword">in</span> adj[u]:
+            <span class="keyword">if</span> v <span class="keyword">not in</span> visited:
+                heapq.heappush(heap, (w, v))
+
+    <span class="keyword">return</span> total <span class="keyword">if</span> len(visited) == n <span class="keyword">else</span> -<span class="num">1</span>`
+  },
+  {
+    id: 6,
+    title: "Bit Manipulation DP",
+    difficulty: "legendary",
+    categories: ["dp", "math"],
+    desc: "Use bitmask as DP state to represent subsets. Exponential states but tractable for small N (≤ 20). Classic TSP technique.",
+    tags: ["Bitmask", "DP", "Subset"],
+    examples: "Travelling Salesman, Minimum XOR Sum, Distribute Repeating Integers",
+    timeComplexity: "O(2^N · N)",
+    spaceComplexity: "O(2^N · N)",
+    companies: ["google","meta"],
+    insight: "When N ≤ 20 and a brute-force backtracking would be O(N!), bitmask DP reduces it to O(2^N · N). Think of each bit as 'visited/used'.",
+    when: [
+      "Subset/assignment problems with N ≤ 20.",
+      "Traveling Salesman Problem variants.",
+      "Assigning workers to tasks with constraints.",
+      "Minimum cost to visit all nodes exactly once."
+    ],
+    steps: [
+      "Define dp[mask][i] = best answer when visited set = mask, currently at node i.",
+      "Transition: for each unvisited node j (bit not in mask), dp[mask|(1<<j)][j] = min/max(...).",
+      "Base case: dp[1<<src][src] = 0.",
+      "Answer: min over all i of dp[(1<<n)-1][i] + return_cost."
+    ],
+    useCases: ["Traveling Salesman Problem", "Minimum XOR Sum of Two Arrays", "Distribute Repeating Integers", "Maximum AND Sum", "Shortest Path Visiting All Nodes"],
+    code: `<span class="keyword">def</span> <span class="func">tsp</span>(dist, n):
+    <span class="comment"># dp[mask][i] = min cost, visited=mask, at city i</span>
+    INF = float(<span class="str">'inf'</span>)
+    dp = [[INF] * n <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="num">1</span> << n)]
+    dp[<span class="num">1</span>][<span class="num">0</span>] = <span class="num">0</span>  <span class="comment"># start at city 0</span>
+
+    <span class="keyword">for</span> mask <span class="keyword">in</span> range(<span class="num">1</span> << n):
+        <span class="keyword">for</span> u <span class="keyword">in</span> range(n):
+            <span class="keyword">if</span> dp[mask][u] == INF: <span class="keyword">continue</span>
+            <span class="keyword">if not</span> (mask >> u & <span class="num">1</span>): <span class="keyword">continue</span>  <span class="comment"># u not in mask</span>
+            <span class="keyword">for</span> v <span class="keyword">in</span> range(n):
+                <span class="keyword">if</span> mask >> v & <span class="num">1</span>: <span class="keyword">continue</span>   <span class="comment"># already visited</span>
+                nm = mask | (<span class="num">1</span> << v)
+                dp[nm][v] = min(dp[nm][v], dp[mask][u] + dist[u][v])
+
+    full = (<span class="num">1</span> << n) - <span class="num">1</span>
+    <span class="keyword">return</span> min(dp[full][i] + dist[i][<span class="num">0</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(n))`
+  },
+  {
+    id: 7,
+    title: "KMP / Z-Algorithm",
+    difficulty: "hard",
+    categories: ["strings"],
+    desc: "Linear time string pattern matching. KMP builds a failure function; Z builds a Z-array. Both avoid redundant comparisons.",
+    tags: ["String", "Pattern Match", "Linear"],
+    examples: "Find All Occurrences of Pattern, Repeated String Match, Shortest Palindrome",
+    timeComplexity: "O(N+M)",
+    spaceComplexity: "O(N+M)",
+    companies: ["google","amazon","meta"],
+    insight: "Naive matching is O(NM). KMP/Z are the gold standard for linear matching. Z-algorithm is often simpler to code in interviews.",
+    when: [
+      "Find all occurrences of pattern P in text T.",
+      "Check if a string is periodic (repeated pattern).",
+      "Shortest palindrome / longest palindromic prefix.",
+      "String problems where you need prefix-suffix overlap."
+    ],
+    steps: [
+      "KMP: Build LPS (Longest Proper Prefix Suffix) array for pattern.",
+      "Match: Use lps to skip redundant comparisons on mismatch.",
+      "Z-Algorithm: For each index i, Z[i] = longest substring starting at i matching prefix.",
+      "Concatenate pattern+'#'+text; positions where Z[i]>=len(pattern) are matches."
+    ],
+    useCases: ["Find All Occurrences", "Repeated String Match", "Shortest Palindrome", "Rotate String", "Repeated Substring Pattern"],
+    code: `<span class="keyword">def</span> <span class="func">kmp_search</span>(text, pattern):
+    s = pattern + <span class="str">'#'</span> + text
+    n = len(s)
+    lps = [<span class="num">0</span>] * n
+    j = <span class="num">0</span>
+
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="num">1</span>, n):  <span class="comment"># build LPS</span>
+        <span class="keyword">while</span> j > <span class="num">0</span> <span class="keyword">and</span> s[i] != s[j]:
+            j = lps[j - <span class="num">1</span>]
+        <span class="keyword">if</span> s[i] == s[j]: j += <span class="num">1</span>
+        lps[i] = j
+        <span class="keyword">if</span> j == <span class="num">0</span>: j = <span class="num">0</span>
+
+    m = len(pattern)
+    <span class="keyword">return</span> [i - <span class="num">2</span>*m <span class="keyword">for</span> i, v <span class="keyword">in</span> enumerate(lps) <span class="keyword">if</span> v == m]`
+  },
+  {
+    id: 8,
+    title: "Suffix Array / LCP",
+    difficulty: "legendary",
+    categories: ["strings"],
+    desc: "Sort all suffixes of a string lexicographically. Combine with LCP (Longest Common Prefix) array for O(n log n) string queries.",
+    tags: ["String", "Suffix", "Advanced"],
+    examples: "Longest Repeated Substring, Longest Common Substring, Number of Distinct Substrings",
+    timeComplexity: "O(N log² N)",
+    spaceComplexity: "O(N)",
+    companies: ["google"],
+    insight: "When a Trie is too slow or memory-heavy, a Suffix Array solves the same problems in O(N log N) and much less space.",
+    when: [
+      "Longest common substring of two strings.",
+      "Counting distinct substrings.",
+      "Longest repeated substring.",
+      "String compression and BWT (Burrows-Wheeler)."
+    ],
+    steps: [
+      "Build suffix array: sort suffixes using O(N log²N) radix-sort doubling.",
+      "Build LCP array using Kasai's algorithm O(N).",
+      "Answer range queries using LCP — two suffixes share prefix of length min(LCP[l..r]).",
+      "Combine with sparse table for O(1) LCP range minimum queries."
+    ],
+    useCases: ["Longest Common Substring", "Distinct Substrings Count", "Longest Repeated Substring", "String Compression"],
+    code: `<span class="keyword">def</span> <span class="func">suffix_array</span>(s):
+    s += <span class="str">'$'</span>  <span class="comment"># sentinel smallest char</span>
+    n = len(s)
+    sa = sorted(range(n), key=<span class="keyword">lambda</span> i: s[i:])
+    <span class="keyword">return</span> sa
+
+<span class="keyword">def</span> <span class="func">kasai_lcp</span>(s, sa):
+    n = len(s)
+    rank = [<span class="num">0</span>] * n
+    <span class="keyword">for</span> i, v <span class="keyword">in</span> enumerate(sa): rank[v] = i
+    lcp = [<span class="num">0</span>] * n
+    h = <span class="num">0</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):
+        <span class="keyword">if</span> rank[i] > <span class="num">0</span>:
+            j = sa[rank[i] - <span class="num">1</span>]
+            <span class="keyword">while</span> i+h < n <span class="keyword">and</span> j+h < n <span class="keyword">and</span> s[i+h] == s[j+h]:
+                h += <span class="num">1</span>
+            lcp[rank[i]] = h
+            <span class="keyword">if</span> h > <span class="num">0</span>: h -= <span class="num">1</span>
+    <span class="keyword">return</span> lcp`
+  },
+  {
+    id: 9,
+    title: "Matrix Chain / Interval DP",
+    difficulty: "expert",
+    categories: ["dp"],
+    desc: "DP over intervals [i,j] by trying every split point k. Classic for parenthesization, palindrome, and burst problems.",
+    tags: ["DP", "Interval", "Divide"],
+    examples: "Burst Balloons, Strange Printer, Remove Boxes, Palindrome Partitioning IV",
+    timeComplexity: "O(N³)",
+    spaceComplexity: "O(N²)",
+    companies: ["google","meta","amazon"],
+    insight: "The key insight is: 'what is the LAST operation on interval [i,j]?' This produces an O(N³) recurrence that memoizes beautifully.",
+    when: [
+      "Problems asking about optimal sequence of operations on a range.",
+      "Splitting a string/array into pieces with costs.",
+      "Palindrome partition problems.",
+      "Merging or bursting elements with dependencies."
+    ],
+    steps: [
+      "Define dp[i][j] = optimal value for subproblem on range [i, j].",
+      "Outer loop over interval LENGTH (len=2 to n), inner loops over start i.",
+      "For each [i,j], try all split points k in [i, j-1].",
+      "Combine: dp[i][j] = min/max over k of (dp[i][k] + dp[k+1][j] + cost)."
+    ],
+    useCases: ["Burst Balloons", "Strange Printer", "Remove Boxes", "Minimum Cost to Cut a Stick", "Palindrome Partitioning IV"],
+    code: `<span class="keyword">def</span> <span class="func">burst_balloons</span>(nums):
+    <span class="comment"># Add boundary balloons of value 1</span>
+    nums = [<span class="num">1</span>] + nums + [<span class="num">1</span>]
+    n = len(nums)
+    dp = [[<span class="num">0</span>] * n <span class="keyword">for</span> _ <span class="keyword">in</span> range(n)]
+
+    <span class="keyword">for</span> length <span class="keyword">in</span> range(<span class="num">2</span>, n):     <span class="comment"># interval length</span>
+        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="num">0</span>, n - length):
+            j = i + length
+            <span class="keyword">for</span> k <span class="keyword">in</span> range(i+<span class="num">1</span>, j):  <span class="comment"># k = LAST burst</span>
+                coins = nums[i] * nums[k] * nums[j]
+                dp[i][j] = max(dp[i][j],
+                               dp[i][k] + coins + dp[k][j])
+    <span class="keyword">return</span> dp[<span class="num">0</span>][n-<span class="num">1</span>]`
+  },
+  {
+    id: 10,
+    title: "Max Flow / Min Cut",
+    difficulty: "legendary",
+    categories: ["graphs"],
+    desc: "Ford-Fulkerson / Edmonds-Karp find maximum flow in a network. Min-cut equals max-flow by the Max-Flow Min-Cut theorem.",
+    tags: ["Graph", "Flow", "Network"],
+    examples: "Maximum Flow, Min Cut, Bipartite Matching, Project Selection",
+    timeComplexity: "O(VE²)",
+    spaceComplexity: "O(V+E)",
+    companies: ["google","amazon"],
+    insight: "Network flow is a superpower — bipartite matching, project selection, and many constraint problems reduce to max-flow.",
+    when: [
+      "Maximum throughput through a network.",
+      "Bipartite maximum matching.",
+      "Project selection / closure problems.",
+      "Image segmentation or scheduling with dependencies."
+    ],
+    steps: [
+      "Build residual graph with forward and backward edges.",
+      "BFS (Edmonds-Karp) to find augmenting path from source to sink.",
+      "Find bottleneck capacity along path; update residual capacities.",
+      "Repeat until no augmenting path exists. Total flow = max flow."
+    ],
+    useCases: ["Maximum Flow", "Bipartite Matching", "Project Selection", "Minimum Vertex Cover", "Escape from Maze"],
+    code: `<span class="keyword">from</span> collections <span class="keyword">import</span> deque, defaultdict
+
+<span class="keyword">def</span> <span class="func">max_flow</span>(graph, source, sink):
+    <span class="keyword">def</span> <span class="func">bfs</span>(src, snk, parent):
+        visited = {src}
+        q = deque([src])
+        <span class="keyword">while</span> q:
+            u = q.popleft()
+            <span class="keyword">for</span> v <span class="keyword">in</span> graph[u]:
+                <span class="keyword">if</span> v <span class="keyword">not in</span> visited <span class="keyword">and</span> graph[u][v] > <span class="num">0</span>:
+                    visited.add(v); parent[v] = u
+                    <span class="keyword">if</span> v == snk: <span class="keyword">return True</span>
+                    q.append(v)
+        <span class="keyword">return False</span>
+
+    flow = <span class="num">0</span>
+    <span class="keyword">while True</span>:
+        parent = {}
+        <span class="keyword">if not</span> bfs(source, sink, parent): <span class="keyword">break</span>
+        path_flow = float(<span class="str">'inf'</span>)
+        v = sink
+        <span class="keyword">while</span> v != source:
+            u = parent[v]
+            path_flow = min(path_flow, graph[u][v])
+            v = u
+        v = sink
+        <span class="keyword">while</span> v != source:
+            u = parent[v]
+            graph[u][v] -= path_flow
+            graph[v][u] += path_flow
+            v = u
+        flow += path_flow
+    <span class="keyword">return</span> flow`
+  },
+  {
+    id: 11,
+    title: "Heavy-Light Decomposition",
+    difficulty: "legendary",
+    categories: ["trees"],
+    desc: "Decomposes a tree into chains, enabling O(log²N) path queries/updates using a Segment Tree on each chain.",
+    tags: ["Tree", "Decomposition", "Range Query"],
+    examples: "Path Sum on Tree, Max on Path, Tree Path Update",
+    timeComplexity: "O(log² N)",
+    spaceComplexity: "O(N)",
+    companies: ["google","meta"],
+    insight: "Any path between two nodes in a tree passes through at most O(log N) heavy chains. This makes arbitrary path queries tractable.",
+    when: [
+      "Range queries or updates along tree paths.",
+      "Sum/min/max on the path between two nodes.",
+      "Subtree queries combined with path queries.",
+      "Problems where tree structure must support online updates."
+    ],
+    steps: [
+      "DFS to compute subtree sizes. The 'heavy child' of each node is the child with largest subtree.",
+      "Second DFS to assign positions: follow heavy edges first (forms heavy chains), then light edges.",
+      "Build a Segment Tree over the flattened position array.",
+      "Path query u→v: walk up chains, querying Segment Tree on each chain segment."
+    ],
+    useCases: ["Path Sum Queries on Tree", "Max on Path Between Nodes", "LCA with Path Queries", "Tree Path Update"],
+    code: `<span class="keyword">class</span> <span class="func">HLD</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, n, adj, vals):
+        self.n = n; self.adj = adj; self.vals = vals
+        self.parent = [-<span class="num">1</span>]*n; self.depth  = [<span class="num">0</span>]*n
+        self.heavy  = [-<span class="num">1</span>]*n; self.sz     = [<span class="num">1</span>]*n
+        self.head   = [<span class="num">0</span>]*n; self.pos    = [<span class="num">0</span>]*n
+        self._dfs_sz(<span class="num">0</span>, -<span class="num">1</span>)
+        self._dfs_hld(<span class="num">0</span>, <span class="num">0</span>, [<span class="num">0</span>])
+
+    <span class="keyword">def</span> <span class="func">_dfs_sz</span>(self, u, p):
+        <span class="keyword">for</span> v <span class="keyword">in</span> self.adj[u]:
+            <span class="keyword">if</span> v == p: <span class="keyword">continue</span>
+            self.parent[v] = u
+            self.depth[v] = self.depth[u] + <span class="num">1</span>
+            self._dfs_sz(v, u)
+            self.sz[u] += self.sz[v]
+            <span class="keyword">if</span> self.heavy[u]==-<span class="num">1</span> <span class="keyword">or</span> self.sz[v]>self.sz[self.heavy[u]]:
+                self.heavy[u] = v
+
+    <span class="keyword">def</span> <span class="func">_dfs_hld</span>(self, u, h, timer):
+        self.head[u] = h; self.pos[u] = timer[<span class="num">0</span>]; timer[<span class="num">0</span>] += <span class="num">1</span>
+        <span class="keyword">if</span> self.heavy[u] != -<span class="num">1</span>: self._dfs_hld(self.heavy[u], h, timer)
+        <span class="keyword">for</span> v <span class="keyword">in</span> self.adj[u]:
+            <span class="keyword">if</span> v != self.parent[u] <span class="keyword">and</span> v != self.heavy[u]:
+                self._dfs_hld(v, v, timer)`
+  },
+  {
+    id: 12,
+    title: "Strongly Connected Components",
+    difficulty: "expert",
+    categories: ["graphs"],
+    desc: "Kosaraju's or Tarjan's algorithm finds all SCCs in O(V+E). Essential for condensation graphs and 2-SAT.",
+    tags: ["Graph", "DFS", "SCC"],
+    examples: "Critical Connections, 2-SAT, Course Schedule Condensation",
+    timeComplexity: "O(V+E)",
+    spaceComplexity: "O(V)",
+    companies: ["google","amazon","meta"],
+    insight: "SCCs partition a directed graph into maximal sub-graphs where every node reaches every other. The condensation (DAG of SCCs) is always a DAG.",
+    when: [
+      "Find groups of mutually reachable nodes in directed graph.",
+      "2-SAT boolean satisfiability.",
+      "Detect cycles in directed graphs.",
+      "Condensation to simplify graph structure for further DP."
+    ],
+    steps: [
+      "Tarjan: DFS maintaining disc[], low[], and a stack.",
+      "low[u] = min disc reachable from subtree of u.",
+      "When low[u] == disc[u], pop stack until u: these form an SCC.",
+      "Kosaraju: First DFS on original; second DFS on reversed graph by finish order."
+    ],
+    useCases: ["Critical Connections in Network", "2-SAT", "Course Schedule SCC", "Reachability in Directed Graph"],
+    code: `<span class="keyword">def</span> <span class="func">tarjan_scc</span>(n, adj):
+    disc = [-<span class="num">1</span>] * n; low = [<span class="num">0</span>] * n
+    on_stack = [<span class="keyword">False</span>] * n
+    stack = []; sccs = []; timer = [<span class="num">0</span>]
+
+    <span class="keyword">def</span> <span class="func">dfs</span>(u):
+        disc[u] = low[u] = timer[<span class="num">0</span>]; timer[<span class="num">0</span>] += <span class="num">1</span>
+        stack.append(u); on_stack[u] = <span class="keyword">True</span>
+        <span class="keyword">for</span> v <span class="keyword">in</span> adj[u]:
+            <span class="keyword">if</span> disc[v] == -<span class="num">1</span>:
+                dfs(v); low[u] = min(low[u], low[v])
+            <span class="keyword">elif</span> on_stack[v]:
+                low[u] = min(low[u], disc[v])
+        <span class="keyword">if</span> low[u] == disc[u]:   <span class="comment"># root of SCC</span>
+            scc = []
+            <span class="keyword">while True</span>:
+                v = stack.pop(); on_stack[v] = <span class="keyword">False</span>
+                scc.append(v)
+                <span class="keyword">if</span> v == u: <span class="keyword">break</span>
+            sccs.append(scc)
+
+    <span class="keyword">for</span> u <span class="keyword">in</span> range(n):
+        <span class="keyword">if</span> disc[u] == -<span class="num">1</span>: dfs(u)
+    <span class="keyword">return</span> sccs`
+  },
+  {
+    id: 13,
+    title: "Convex Hull Trick",
+    difficulty: "legendary",
+    categories: ["dp", "math"],
+    desc: "Optimize DP transitions of the form dp[i] = min(dp[j] + b[j]*x[i]) from O(N²) to O(N) using a convex hull of lines.",
+    tags: ["DP Optimization", "Geometry", "Lines"],
+    examples: "Minimum Cost to Hire K Workers, Building Bridges, Divide Chocolate",
+    timeComplexity: "O(N log N) or O(N)",
+    spaceComplexity: "O(N)",
+    companies: ["google","meta"],
+    insight: "When DP transitions look like 'add a line y=mx+b and query minimum', the Convex Hull Trick (Li Chao Tree) reduces O(N²) DP to O(N log N).",
+    when: [
+      "DP recurrence is dp[i] = min over j < i of (f(j) + g(j)*h(i)).",
+      "Can decompose transition into lines with different slopes.",
+      "Online queries where line slopes aren't monotone (use Li Chao Tree).",
+      "Offline queries with monotone slopes (use deque — O(N))."
+    ],
+    steps: [
+      "Each j contributes a line: y = g(j)*x + f(j) where x = h(i).",
+      "Maintain lower convex hull of these lines.",
+      "For each new query x=h(i), find minimum over all lines in O(log N) (ternary search) or O(1) amortized (monotone deque).",
+      "Li Chao Tree: segment tree over x-values, each node stores dominant line."
+    ],
+    useCases: ["Building Bridges", "Minimum Cost to Hire K Workers", "Divide Chocolate", "Guard the Forest", "Slope Trick"],
+    code: `<span class="keyword">from</span> collections <span class="keyword">import</span> deque
+
+<span class="keyword">class</span> <span class="func">ConvexHullTrick</span>:
+    <span class="comment"># For min queries with monotone slopes (increasing)</span>
+    <span class="keyword">def</span> <span class="func">__init__</span>(self):
+        self.hull = deque()  <span class="comment"># deque of (m, b) lines y=mx+b</span>
+
+    <span class="keyword">def</span> <span class="func">_bad</span>(self, l1, l2, l3):
+        <span class="comment"># l2 never optimal between l1 and l3</span>
+        m1,b1=l1; m2,b2=l2; m3,b3=l3
+        <span class="keyword">return</span> (b3-b1)*(m1-m2) <= (b2-b1)*(m1-m3)
+
+    <span class="keyword">def</span> <span class="func">add_line</span>(self, m, b):
+        line = (m, b)
+        <span class="keyword">while</span> len(self.hull)>=<span class="num">2</span> <span class="keyword">and</span> self._bad(self.hull[-<span class="num">2</span>],self.hull[-<span class="num">1</span>],line):
+            self.hull.pop()
+        self.hull.append(line)
+
+    <span class="keyword">def</span> <span class="func">query</span>(self, x):
+        <span class="keyword">while</span> len(self.hull)>=<span class="num">2</span>:
+            m1,b1=self.hull[<span class="num">0</span>]; m2,b2=self.hull[<span class="num">1</span>]
+            <span class="keyword">if</span> m1*x+b1 >= m2*x+b2: self.hull.popleft()
+            <span class="keyword">else</span>: <span class="keyword">break</span>
+        m,b = self.hull[<span class="num">0</span>]
+        <span class="keyword">return</span> m*x + b`
+  },
+  {
+    id: 14,
+    title: "Lowest Common Ancestor (Binary Lifting)",
+    difficulty: "expert",
+    categories: ["trees"],
+    desc: "Preprocess O(N log N) ancestors for each node, enabling O(log N) LCA queries on trees.",
+    tags: ["Tree", "Binary Lifting", "LCA"],
+    examples: "Kth Ancestor of Tree Node, Max Weighted Path, Distance in Tree",
+    timeComplexity: "O(N log N) build, O(log N) query",
+    spaceComplexity: "O(N log N)",
+    companies: ["google","meta","amazon"],
+    insight: "Binary lifting tables double as a general technique: store any aggregate (max/min/sum/XOR) along paths to answer path queries in O(log N).",
+    when: [
+      "Repeated LCA queries on a static tree.",
+      "K-th ancestor of a node.",
+      "Distance between two nodes in a weighted tree.",
+      "Maximum/minimum edge weight on a path between two nodes."
+    ],
+    steps: [
+      "DFS to compute depth[] and parent[] arrays.",
+      "Build up[][]: up[k][v] = 2^k-th ancestor of v. up[0][v]=parent[v]; up[k][v]=up[k-1][up[k-1][v]].",
+      "LCA query(u,v): bring deeper node to same depth using binary lifting, then lift both together until equal.",
+      "For path max: store max edge weight in up[][] and combine during query."
+    ],
+    useCases: ["Lowest Common Ancestor", "Kth Ancestor", "Distance in Tree", "Max Edge on Path", "Path Queries with Aggregates"],
+    code: `<span class="keyword">import</span> math
+
+<span class="keyword">class</span> <span class="func">LCA</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, n, adj, root=<span class="num">0</span>):
+        self.LOG = max(<span class="num">1</span>, math.floor(math.log2(n)) + <span class="num">1</span>)
+        self.depth = [<span class="num">0</span>] * n
+        self.up = [[-<span class="num">1</span>]*n <span class="keyword">for</span> _ <span class="keyword">in</span> range(self.LOG)]
+        self._dfs(root, -<span class="num">1</span>, adj)
+        <span class="keyword">for</span> k <span class="keyword">in</span> range(<span class="num">1</span>, self.LOG):
+            <span class="keyword">for</span> v <span class="keyword">in</span> range(n):
+                p = self.up[k-<span class="num">1</span>][v]
+                self.up[k][v] = self.up[k-<span class="num">1</span>][p] <span class="keyword">if</span> p != -<span class="num">1</span> <span class="keyword">else</span> -<span class="num">1</span>
+
+    <span class="keyword">def</span> <span class="func">_dfs</span>(self, u, p, adj):
+        self.up[<span class="num">0</span>][u] = p
+        <span class="keyword">for</span> v <span class="keyword">in</span> adj[u]:
+            <span class="keyword">if</span> v != p:
+                self.depth[v] = self.depth[u] + <span class="num">1</span>
+                self._dfs(v, u, adj)
+
+    <span class="keyword">def</span> <span class="func">lca</span>(self, u, v):
+        <span class="keyword">if</span> self.depth[u] < self.depth[v]: u, v = v, u
+        diff = self.depth[u] - self.depth[v]
+        <span class="keyword">for</span> k <span class="keyword">in</span> range(self.LOG):
+            <span class="keyword">if</span> (diff >> k) & <span class="num">1</span>: u = self.up[k][u]
+        <span class="keyword">if</span> u == v: <span class="keyword">return</span> u
+        <span class="keyword">for</span> k <span class="keyword">in</span> range(self.LOG - <span class="num">1</span>, -<span class="num">1</span>, -<span class="num">1</span>):
+            <span class="keyword">if</span> self.up[k][u] != self.up[k][v]:
+                u = self.up[k][u]; v = self.up[k][v]
+        <span class="keyword">return</span> self.up[<span class="num">0</span>][u]`
+  },
+  {
+    id: 15,
+    title: "2-SAT",
+    difficulty: "legendary",
+    categories: ["graphs"],
+    desc: "Solve boolean satisfiability with only 2-literal clauses in O(V+E) using SCC on an implication graph.",
+    tags: ["Graph", "SCC", "Logic"],
+    examples: "Ensure program can satisfy constraints, Network configuration, Assignment problems",
+    timeComplexity: "O(V+E)",
+    spaceComplexity: "O(V+E)",
+    companies: ["google","meta"],
+    insight: "2-SAT reduces any system of OR clauses over boolean variables to finding SCCs. If x and ¬x are in the same SCC → unsatisfiable. Otherwise, SCC topological order gives the assignment.",
+    when: [
+      "Satisfy a system of implications or OR constraints between boolean variables.",
+      "Each clause has exactly 2 literals.",
+      "Checking feasibility before running an optimization.",
+      "Problems solvable via binary search + feasibility check using 2-SAT."
+    ],
+    steps: [
+      "For each clause (a OR b), add implication edges: (¬a → b) and (¬b → a).",
+      "Variable x has nodes 2x (true) and 2x+1 (false).",
+      "Run Tarjan's SCC on the implication graph.",
+      "Unsatisfiable if any x: SCC(x) == SCC(¬x). Otherwise assign: x=true if SCC(x) > SCC(¬x) in reverse topo order."
+    ],
+    useCases: ["Boolean Constraint Satisfaction", "Assign TV Channels", "Network Configuration", "Scheduling with Conflicts"],
+    code: `<span class="keyword">class</span> <span class="func">TwoSAT</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, n):
+        self.n = n
+        self.adj  = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="num">2</span>*n)]
+        self.radj = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="num">2</span>*n)]
+
+    <span class="keyword">def</span> <span class="func">add_clause</span>(self, u, nu, v, nv):
+        <span class="comment"># (u OR v): ¬u→v and ¬v→u</span>
+        a = <span class="num">2</span>*u + (<span class="num">1</span> <span class="keyword">if</span> nu <span class="keyword">else</span> <span class="num">0</span>)
+        b = <span class="num">2</span>*v + (<span class="num">1</span> <span class="keyword">if</span> nv <span class="keyword">else</span> <span class="num">0</span>)
+        self.adj[a^<span class="num">1</span>].append(b)
+        self.adj[b^<span class="num">1</span>].append(a)
+        self.radj[b].append(a^<span class="num">1</span>)
+        self.radj[a].append(b^<span class="num">1</span>)
+
+    <span class="keyword">def</span> <span class="func">solve</span>(self):
+        <span class="comment"># Kosaraju's for SCC, return assignment or None</span>
+        n2 = <span class="num">2</span> * self.n
+        order, visited, comp = [], [<span class="keyword">False</span>]*n2, [-<span class="num">1</span>]*n2
+
+        <span class="keyword">def</span> <span class="func">dfs1</span>(v):
+            visited[v] = <span class="keyword">True</span>
+            <span class="keyword">for</span> u <span class="keyword">in</span> self.adj[v]:
+                <span class="keyword">if not</span> visited[u]: dfs1(u)
+            order.append(v)
+
+        <span class="keyword">def</span> <span class="func">dfs2</span>(v, c):
+            comp[v] = c
+            <span class="keyword">for</span> u <span class="keyword">in</span> self.radj[v]:
+                <span class="keyword">if</span> comp[u] == -<span class="num">1</span>: dfs2(u, c)
+
+        <span class="keyword">for</span> v <span class="keyword">in</span> range(n2):
+            <span class="keyword">if not</span> visited[v]: dfs1(v)
+        c = <span class="num">0</span>
+        <span class="keyword">for</span> v <span class="keyword">in</span> reversed(order):
+            <span class="keyword">if</span> comp[v] == -<span class="num">1</span>: dfs2(v, c); c += <span class="num">1</span>
+
+        assignment = []
+        <span class="keyword">for</span> i <span class="keyword">in</span> range(self.n):
+            <span class="keyword">if</span> comp[<span class="num">2</span>*i] == comp[<span class="num">2</span>*i+<span class="num">1</span>]: <span class="keyword">return None</span>
+            assignment.append(comp[<span class="num">2</span>*i] > comp[<span class="num">2</span>*i+<span class="num">1</span>])
+        <span class="keyword">return</span> assignment`
+  }
+];
+
+// ===== RENDER =====
+function render(data) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  document.getElementById('visibleCount').textContent = data.length;
+
+  if (data.length === 0) {
+    grid.innerHTML = '<div class="empty">😵 NO PATTERNS FOUND! TRY AGAIN!</div>';
+    return;
+  }
+
+  data.forEach((p, idx) => {
+    const color = CARD_COLORS[(p.id - 1) % CARD_COLORS.length];
+    const card = document.createElement('div');
+    card.className = 'pattern-card';
+    card.style.setProperty('--card-color', color);
+    card.style.animationDelay = `${idx * 0.05}s`;
+
+    const diffClass = `diff-${p.difficulty}`;
+    const diffEmoji = { hard: '🔴', expert: '💜', legendary: '⭐' }[p.difficulty] || '🔴';
+
+    card.innerHTML = `
+      <div class="card-number">PATTERN #${String(p.id).padStart(2, '0')}</div>
+      <div class="card-header">
+        <div class="card-title">${p.title}</div>
+        <div class="difficulty ${diffClass}">${diffEmoji} ${p.difficulty.toUpperCase()}</div>
+      </div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      <div class="card-examples">💡 <span>${p.examples.split(',')[0].trim()}</span> + ${p.examples.split(',').length - 1} more</div>
+    `;
+    card.addEventListener('click', () => openModal(p, color));
+    grid.appendChild(card);
+  });
+}
+
+// ===== FILTER =====
+let activeFilter = 'all';
+
+function filterData() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  return patterns.filter(p => {
+    const matchFilter = activeFilter === 'all' || activeFilter === p.difficulty || p.categories.includes(activeFilter);
+    const matchSearch = !query || p.title.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query) || p.tags.some(t => t.toLowerCase().includes(query)) || p.examples.toLowerCase().includes(query);
+    return matchFilter && matchSearch;
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', () => render(filterData()));
+
+document.getElementById('filters').addEventListener('click', e => {
+  if (!e.target.classList.contains('filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  activeFilter = e.target.dataset.filter;
+  render(filterData());
+});
+
+// ===== MODAL =====
+const CO_CLASSES = { google: 'co-google', meta: 'co-meta', amazon: 'co-amazon', apple: 'co-apple', netflix: 'co-netflix', uber: 'co-uber', microsoft: 'co-microsoft', stripe: 'co-stripe' };
+const CO_LABELS  = { google: 'Google', meta: 'Meta', amazon: 'Amazon', apple: 'Apple', netflix: 'Netflix', uber: 'Uber', microsoft: 'Microsoft', stripe: 'Stripe' };
+
+function openModal(p, color) {
+  document.getElementById('modalNumber').textContent = `PATTERN #${String(p.id).padStart(2, '0')}`;
+  document.getElementById('modalTitle').textContent = p.title;
+  document.getElementById('modalHeader').style.background = color || '#FF3EA5';
+  document.getElementById('modal').style.setProperty('--modal-color', color || '#FF3EA5');
+
+  const diffEmoji = { hard: '🔴', expert: '💜', legendary: '⭐' }[p.difficulty] || '🔴';
+
+  const companiesHTML = p.companies.map(c =>
+    `<span class="company-badge ${CO_CLASSES[c]}">${CO_LABELS[c]}</span>`
+  ).join('');
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">📖 OVERVIEW</div>
+      <p>${p.desc}</p>
+      <div class="insight-box">💡 <strong>KEY INSIGHT:</strong> ${p.insight}</div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">⚡ COMPLEXITY</div>
+      <div class="complexity-row">
+        <div class="complexity-item">
+          <span class="complexity-label">TIME</span>
+          <span class="complexity-value">${p.timeComplexity}</span>
+        </div>
+        <div class="complexity-item">
+          <span class="complexity-label">SPACE</span>
+          <span class="complexity-value">${p.spaceComplexity}</span>
+        </div>
+        <div class="complexity-item">
+          <span class="complexity-label">LEVEL</span>
+          <span class="complexity-value">${diffEmoji} ${p.difficulty.toUpperCase()}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🏢 ASKED AT</div>
+      <div class="companies">${companiesHTML}</div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🎯 WHEN TO USE</div>
+      <ul class="steps-list">
+        ${p.when.map(w => `<li>${w}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🔢 ALGORITHM STEPS</div>
+      <ul class="steps-list">
+        ${p.steps.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">💻 CODE TEMPLATE</div>
+      <div class="code-wrapper">
+        <button class="copy-btn" onclick="copyCode(this)">📋 COPY</button>
+        <pre class="code-block">${p.code}</pre>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">🏆 CLASSIC PROBLEMS</div>
+      <div class="use-cases">
+        ${p.useCases.map(u => `<span class="use-case-chip">${u}</span>`).join('')}
+      </div>
+    </div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+document.getElementById('modalClose').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.remove('open');
+});
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay'))
+    document.getElementById('modalOverlay').classList.remove('open');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+
+// ===== COPY =====
+function copyCode(btn) {
+  const pre = btn.nextElementSibling;
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = '✅ COPIED!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 COPY'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// ===== THEME =====
+let isDark = false;
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.classList.toggle('dark', isDark);
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+  icon.style.transform = 'rotate(360deg) scale(1.3)';
+  setTimeout(() => { icon.style.transform = ''; }, 400);
+  icon.textContent = isDark ? '☀️' : '🌙';
+  label.textContent = isDark ? 'LIGHT MODE' : 'DARK MODE';
+  try { localStorage.setItem('advTheme', isDark ? 'dark' : 'light'); } catch(e) {}
+}
+
+(function() {
+  try {
+    if (localStorage.getItem('advTheme') === 'dark') {
+      isDark = true;
+      document.body.classList.add('dark');
+      document.getElementById('toggleIcon').textContent = '☀️';
+      document.getElementById('toggleLabel').textContent = 'LIGHT MODE';
+    }
+  } catch(e) {}
+})();
+
+render(patterns);
+</script>
+</body>
+</html>
