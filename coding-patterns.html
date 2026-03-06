@@ -656,12 +656,37 @@
   ::-webkit-scrollbar-track { background: var(--white); border-left: 2px solid var(--black); }
   ::-webkit-scrollbar-thumb { background: var(--black); border-radius: 4px; }
 
+  /* ===== TOP NAV ===== */
+  .topnav {
+    background: var(--black);
+    border-bottom: 3px solid var(--yellow);
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topnav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .topnav-brand {
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--yellow);
+  }
+
+  body.dark .topnav {
+    background: #0a0a12;
+    border-bottom-color: var(--yellow);
+  }
+
   /* ===== THEME TOGGLE BUTTON ===== */
   .theme-toggle {
-    position: fixed;
-    bottom: 28px;
-    right: 28px;
-    z-index: 200;
     background: var(--black);
     color: var(--yellow);
     border: 3px solid var(--yellow);
@@ -870,6 +895,17 @@
 </head>
 <body>
 
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="container topnav-inner">
+    <span class="topnav-brand">💥 CODE PATTERNS UNIVERSE</span>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+      <span class="toggle-icon" id="toggleIcon">🌙</span>
+      <span id="toggleLabel">DARK MODE</span>
+    </button>
+  </div>
+</nav>
+
 <!-- HEADER -->
 <header>
   <div class="burst burst-1">⚡ POW!</div>
@@ -910,12 +946,6 @@
     <div class="stat-badge">⚡ <span id="visibleCount">15</span> PATTERNS</div>
   </div>
 </footer>
-
-<!-- THEME TOGGLE -->
-<button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
-  <span class="toggle-icon" id="toggleIcon">🌙</span>
-  <span id="toggleLabel">DARK MODE</span>
-</button>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
