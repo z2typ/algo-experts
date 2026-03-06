@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlgoExpert → LeetCode</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0f;--card:#16161f;--border:#2a2a3a;--easy:#22c55e;--medium:#3b82f6;--hard:#f97316;--vhard:#ef4444;--text:#e2e8f0;--muted:#64748b;--accent:#a78bfa;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;}
+  header{padding:3rem 2rem 2rem;text-align:center;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#1a0a2e 0%,var(--bg) 100%);}
+  header h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.02em;background:linear-gradient(135deg,#a78bfa,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem;}
+  header p{color:var(--muted);font-family:'Space Mono',monospace;font-size:.85rem;margin-bottom:.5rem;}
+  .legend{display:flex;gap:1.2rem;justify-content:center;font-family:'Space Mono',monospace;font-size:.72rem;flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:.4rem;color:var(--muted);}
+  .dot-lc{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  .controls{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;padding:1.5rem 2rem;position:sticky;top:0;z-index:10;background:rgba(10,10,15,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+  input[type="text"]{padding:.5rem 1rem;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:6px;font-family:'Space Mono',monospace;font-size:.8rem;outline:none;width:260px;transition:border-color .2s;}
+  input[type="text"]:focus{border-color:var(--accent);}
+  input[type="text"]::placeholder{color:var(--muted);}
+  .filter-btn{padding:.5rem 1rem;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-family:'Syne',sans-serif;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;}
+  .filter-btn:hover{border-color:var(--accent);color:var(--text);}
+  .filter-btn.active{color:var(--bg);border-color:transparent;}
+  .filter-btn.all.active{background:var(--accent);}
+  .filter-btn.easy.active{background:var(--easy);}
+  .filter-btn.medium.active{background:var(--medium);}
+  .filter-btn.hard.active{background:var(--hard);}
+  .filter-btn.vhard.active{background:var(--vhard);}
+  .stats{display:flex;gap:1.5rem;justify-content:center;padding:1rem 2rem;font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);flex-wrap:wrap;}
+  .stat-item span{color:var(--text);font-weight:700;}
+  .table-wrap{max-width:1150px;margin:0 auto;padding:1rem 1.5rem 4rem;}
+  table{width:100%;border-collapse:collapse;}
+  thead th{padding:.75rem 1rem;text-align:left;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);}
+  tbody tr{border-bottom:1px solid rgba(42,42,58,.5);transition:background .15s;}
+  tbody tr:hover{background:var(--card);}
+  tbody tr.hidden{display:none;}
+  td{padding:.65rem 1rem;font-size:.88rem;}
+  td.num{font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted);width:44px;}
+  .diff-badge{display:inline-block;padding:.2rem .55rem;border-radius:4px;font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+  .diff-easy{background:rgba(34,197,94,.15);color:var(--easy);}
+  .diff-medium{background:rgba(59,130,246,.15);color:var(--medium);}
+  .diff-hard{background:rgba(249,115,22,.15);color:var(--hard);}
+  .diff-vhard{background:rgba(239,68,68,.15);color:var(--vhard);}
+  .lc-link{display:inline-flex;align-items:center;gap:.35rem;text-decoration:none;font-family:'Space Mono',monospace;font-size:.73rem;padding:.18rem .55rem;border-radius:4px;transition:all .2s;}
+  .lc-link.lc{color:var(--accent);border:1px solid rgba(167,139,250,.3);}
+  .lc-link.lc:hover{background:rgba(167,139,250,.1);border-color:var(--accent);}
+  .pb{font-size:.6rem;font-weight:700;padding:.1rem .3rem;border-radius:3px;letter-spacing:.04em;}
+  .pb-lc{background:rgba(167,139,250,.2);color:var(--accent);}
+  .topic-tag{display:inline-block;background:rgba(255,255,255,.05);color:var(--muted);border-radius:3px;padding:.1rem .4rem;font-size:.68rem;font-family:'Space Mono',monospace;}
+  @media(max-width:700px){td.topic,th.topic{display:none;}input[type="text"]{width:100%;}}
+</style>
+</head>
+<body>
+<header>
+  <h1>AlgoExpert → LeetCode</h1>
+  <p>// all 200 problems — every problem has a practice link</p>
+  <div class="legend">
+    <div class="legend-item"><div class="dot-lc"></div>LeetCode</div>
+  </div>
+</header>
+<div class="controls">
+  <input type="text" id="search" placeholder="Search problems or topics..." oninput="applyFilters()">
+  <button class="filter-btn all active" onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn easy"   onclick="setFilter('Easy',this)">🟩 Easy</button>
+  <button class="filter-btn medium" onclick="setFilter('Medium',this)">🟦 Medium</button>
+  <button class="filter-btn hard"   onclick="setFilter('Hard',this)">🟥 Hard</button>
+  <button class="filter-btn vhard"  onclick="setFilter('Very Hard',this)">⬛ Very Hard</button>
+</div>
+<div class="stats">
+  <div class="stat-item">Showing: <span id="countVisible">—</span></div>
+  <div class="stat-item">🟩 Easy: <span id="cEasy">—</span></div>
+  <div class="stat-item">🟦 Medium: <span id="cMed">—</span></div>
+  <div class="stat-item">🟥 Hard: <span id="cHard">—</span></div>
+  <div class="stat-item">⬛ Very Hard: <span id="cVH">—</span></div>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>#</th><th>AlgoExpert Problem</th><th>Difficulty</th><th class="topic">Topic</th><th>Practice Link</th></tr></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+<script>
+const P=[
+/* ── EASY (31) ── */
+{n:"Two Number Sum",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/two-sum/",ln:"#1 Two Sum"},
+{n:"Validate Subsequence",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/is-subsequence/",ln:"#392 Is Subsequence"},
+{n:"Sorted Squared Array",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/squares-of-a-sorted-array/",ln:"#977 Squares of a Sorted Array"},
+{n:"Tournament Winner",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/sender-with-largest-word-count/",ln:"#2284 Sender With Largest Word Count"},
+{n:"Non-Constructible Change",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/maximum-number-of-consecutive-values-you-can-make/",ln:"#1798 Max Consecutive Values You Can Make"},
+{n:"Transpose Matrix",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/transpose-matrix/",ln:"#867 Transpose Matrix"},
+{n:"Find Closest Value In BST",d:"Easy",t:"BST",p:"lc",l:"https://leetcode.com/problems/closest-binary-search-tree-value/",ln:"#270 Closest BST Value"},
+{n:"Branch Sums",d:"Easy",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/path-sum/",ln:"#112 Path Sum"},
+{n:"Node Depths",d:"Easy",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/sum-of-root-to-leaf-binary-numbers/",ln:"#1022 Sum of Root to Leaf Numbers"},
+{n:"Evaluate Expression Tree",d:"Easy",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/design-an-expression-tree-with-evaluate-function/",ln:"#1628 Design Expression Tree with Evaluate"},
+{n:"Depth-first Search",d:"Easy",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/number-of-islands/",ln:"#200 Number of Islands (DFS)"},
+{n:"Minimum Waiting Time",d:"Easy",t:"Greedy",p:"lc",l:"https://leetcode.com/problems/minimum-time-to-complete-trips/",ln:"#2187 Minimum Time to Complete Trips"},
+{n:"Class Photos",d:"Easy",t:"Greedy",p:"lc",l:"https://leetcode.com/problems/advantage-shuffle/",ln:"#870 Advantage Shuffle"},
+{n:"Tandem Bicycle",d:"Easy",t:"Greedy",p:"lc",l:"https://leetcode.com/problems/boats-to-save-people/",ln:"#881 Boats to Save People"},
+{n:"Optimal Freelancing",d:"Easy",t:"Greedy",p:"lc",l:"https://leetcode.com/problems/maximum-profit-in-job-scheduling/",ln:"#1235 Maximum Profit in Job Scheduling"},
+{n:"Remove Duplicates From Linked List",d:"Easy",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/remove-duplicates-from-sorted-list/",ln:"#83 Remove Duplicates from Sorted List"},
+{n:"Middle Node",d:"Easy",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/middle-of-the-linked-list/",ln:"#876 Middle of the Linked List"},
+{n:"Nth Fibonacci",d:"Easy",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/fibonacci-number/",ln:"#509 Fibonacci Number"},
+{n:"Product Sum",d:"Easy",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/nested-list-weight-sum/",ln:"#339 Nested List Weight Sum"},
+{n:"Binary Search",d:"Easy",t:"Searching",p:"lc",l:"https://leetcode.com/problems/binary-search/",ln:"#704 Binary Search"},
+{n:"Find Three Largest Numbers",d:"Easy",t:"Searching",p:"lc",l:"https://leetcode.com/problems/third-maximum-number/",ln:"#414 Third Maximum Number"},
+{n:"Bubble Sort",d:"Easy",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/sort-an-array/",ln:"#912 Sort an Array"},
+{n:"Insertion Sort",d:"Easy",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/insertion-sort-list/",ln:"#147 Insertion Sort List"},
+{n:"Selection Sort",d:"Easy",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/sort-colors/",ln:"#75 Sort Colors"},
+{n:"Palindrome Check",d:"Easy",t:"Strings",p:"lc",l:"https://leetcode.com/problems/valid-palindrome/",ln:"#125 Valid Palindrome"},
+{n:"Caesar Cipher Encryptor",d:"Easy",t:"Strings",p:"lc",l:"https://leetcode.com/problems/shifting-letters/",ln:"#848 Shifting Letters"},
+{n:"Run-Length Encoding",d:"Easy",t:"Strings",p:"lc",l:"https://leetcode.com/problems/string-compression/",ln:"#443 String Compression"},
+{n:"Common Characters",d:"Easy",t:"Strings",p:"lc",l:"https://leetcode.com/problems/find-common-characters/",ln:"#1002 Find Common Characters"},
+{n:"Generate Document",d:"Easy",t:"Strings",p:"lc",l:"https://leetcode.com/problems/ransom-note/",ln:"#383 Ransom Note"},
+{n:"First Non-Repeating Character",d:"Easy",t:"Strings",p:"lc",l:"https://leetcode.com/problems/first-unique-character-in-a-string/",ln:"#387 First Unique Character in a String"},
+{n:"Semordnilap",d:"Easy",t:"Strings",p:"lc",l:"https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/",ln:"#2131 Longest Palindrome..."},
+/* ── MEDIUM (73) ── */
+{n:"Three Number Sum",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/3sum/",ln:"#15 3Sum"},
+{n:"Smallest Difference",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/minimum-absolute-difference/",ln:"#1200 Minimum Absolute Difference"},
+{n:"Move Element To End",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/move-zeroes/",ln:"#283 Move Zeroes"},
+{n:"Monotonic Array",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/monotonic-array/",ln:"#896 Monotonic Array"},
+{n:"Spiral Traverse",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/spiral-matrix/",ln:"#54 Spiral Matrix"},
+{n:"Longest Peak",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/longest-mountain-in-array/",ln:"#845 Longest Mountain in Array"},
+{n:"Array Of Products",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/product-of-array-except-self/",ln:"#238 Product of Array Except Self"},
+{n:"First Duplicate Value",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/find-the-duplicate-number/",ln:"#287 Find the Duplicate Number"},
+{n:"Merge Overlapping Intervals",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/merge-intervals/",ln:"#56 Merge Intervals"},
+{n:"Best Seat",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/exam-room/",ln:"#855 Exam Room"},
+{n:"Zero Sum Subarray",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/subarray-sum-equals-k/",ln:"#560 Subarray Sum Equals K"},
+{n:"Missing Numbers",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/",ln:"#448 Find All Numbers Disappeared"},
+{n:"Majority Element",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/majority-element/",ln:"#169 Majority Element"},
+{n:"Sweet And Savory",d:"Medium",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/two-sum-less-than-k/",ln:"#1099 Two Sum Less Than K"},
+{n:"BST Construction",d:"Medium",t:"BST",p:"lc",l:"https://leetcode.com/problems/insert-into-a-binary-search-tree/",ln:"#701 Insert into a Binary Search Tree"},
+{n:"Validate BST",d:"Medium",t:"BST",p:"lc",l:"https://leetcode.com/problems/validate-binary-search-tree/",ln:"#98 Validate Binary Search Tree"},
+{n:"BST Traversal",d:"Medium",t:"BST",p:"lc",l:"https://leetcode.com/problems/binary-tree-inorder-traversal/",ln:"#94 Binary Tree Inorder Traversal"},
+{n:"Min Height BST",d:"Medium",t:"BST",p:"lc",l:"https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree/",ln:"#108 Convert Sorted Array to BST"},
+{n:"Find Kth Largest Value In BST",d:"Medium",t:"BST",p:"lc",l:"https://leetcode.com/problems/kth-largest-element-in-a-stream/",ln:"#703 Kth Largest Element in a Stream"},
+{n:"Reconstruct BST",d:"Medium",t:"BST",p:"lc",l:"https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/",ln:"#1008 Construct BST from Preorder Traversal"},
+{n:"Invert Binary Tree",d:"Medium",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/invert-binary-tree/",ln:"#226 Invert Binary Tree"},
+{n:"Binary Tree Diameter",d:"Medium",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/diameter-of-binary-tree/",ln:"#543 Diameter of Binary Tree"},
+{n:"Find Successor",d:"Medium",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/inorder-successor-in-bst/",ln:"#285 Inorder Successor in BST"},
+{n:"Height Balanced Binary Tree",d:"Medium",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/balanced-binary-tree/",ln:"#110 Balanced Binary Tree"},
+{n:"Merge Binary Trees",d:"Medium",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/merge-two-binary-trees/",ln:"#617 Merge Two Binary Trees"},
+{n:"Symmetrical Tree",d:"Medium",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/symmetric-tree/",ln:"#101 Symmetric Tree"},
+{n:"Split Binary Tree",d:"Medium",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/equal-tree-partition/",ln:"#663 Equal Tree Partition"},
+{n:"Max Subset Sum No Adjacent",d:"Medium",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/house-robber/",ln:"#198 House Robber"},
+{n:"Number Of Ways To Make Change",d:"Medium",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/coin-change-ii/",ln:"#518 Coin Change II"},
+{n:"Min Number Of Coins For Change",d:"Medium",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/coin-change/",ln:"#322 Coin Change"},
+{n:"Levenshtein Distance",d:"Medium",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/edit-distance/",ln:"#72 Edit Distance"},
+{n:"Number Of Ways To Traverse Graph",d:"Medium",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/unique-paths/",ln:"#62 Unique Paths"},
+{n:"Kadane's Algorithm",d:"Medium",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/maximum-subarray/",ln:"#53 Maximum Subarray"},
+{n:"Stable Internships",d:"Medium",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/maximum-number-of-accepted-invitations/",ln:"#1820 Max Accepted Invitations"},
+{n:"Union Find",d:"Medium",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/number-of-provinces/",ln:"#547 Number of Provinces"},
+{n:"Single Cycle Check",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/circular-array-loop/",ln:"#457 Circular Array Loop"},
+{n:"Breadth-first Search",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/binary-tree-level-order-traversal/",ln:"#102 Binary Tree Level Order Traversal"},
+{n:"River Sizes",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/number-of-islands/",ln:"#200 Number of Islands"},
+{n:"Youngest Common Ancestor",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",ln:"#236 LCA of a Binary Tree"},
+{n:"Remove Islands",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/surrounded-regions/",ln:"#130 Surrounded Regions"},
+{n:"Cycle In Graph",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/course-schedule/",ln:"#207 Course Schedule"},
+{n:"Minimum Passes Of Matrix",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/rotting-oranges/",ln:"#994 Rotting Oranges"},
+{n:"Two-Colorable",d:"Medium",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/is-graph-bipartite/",ln:"#785 Is Graph Bipartite?"},
+{n:"Task Assignment",d:"Medium",t:"Greedy",p:"lc",l:"https://leetcode.com/problems/minimize-maximum-pair-sum-in-array/",ln:"#1877 Minimize Max Pair Sum"},
+{n:"Valid Starting City",d:"Medium",t:"Greedy",p:"lc",l:"https://leetcode.com/problems/gas-station/",ln:"#134 Gas Station"},
+{n:"Min Heap Construction",d:"Medium",t:"Heaps",p:"lc",l:"https://leetcode.com/problems/kth-largest-element-in-a-stream/",ln:"#703 Kth Largest Element in a Stream"},
+{n:"Linked List Construction",d:"Medium",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/design-linked-list/",ln:"#707 Design Linked List"},
+{n:"Remove Kth Node From End",d:"Medium",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/remove-nth-node-from-end-of-list/",ln:"#19 Remove Nth Node From End"},
+{n:"Sum of Linked Lists",d:"Medium",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/add-two-numbers/",ln:"#2 Add Two Numbers"},
+{n:"Merging Linked Lists",d:"Medium",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/intersection-of-two-linked-lists/",ln:"#160 Intersection of Two Linked Lists"},
+{n:"Permutations",d:"Medium",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/permutations/",ln:"#46 Permutations"},
+{n:"Powerset",d:"Medium",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/subsets/",ln:"#78 Subsets"},
+{n:"Phone Number Mnemonics",d:"Medium",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/letter-combinations-of-a-phone-number/",ln:"#17 Letter Combinations of a Phone Number"},
+{n:"Staircase Traversal",d:"Medium",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/climbing-stairs/",ln:"#70 Climbing Stairs"},
+{n:"Blackjack Probability",d:"Medium",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/new-21-game/",ln:"#837 New 21 Game"},
+{n:"Reveal Minesweeper",d:"Medium",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/minesweeper/",ln:"#529 Minesweeper"},
+{n:"Search In Sorted Matrix",d:"Medium",t:"Searching",p:"lc",l:"https://leetcode.com/problems/search-a-2d-matrix-ii/",ln:"#240 Search a 2D Matrix II"},
+{n:"Three Number Sort",d:"Medium",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/sort-colors/",ln:"#75 Sort Colors"},
+{n:"Min Max Stack Construction",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/min-stack/",ln:"#155 Min Stack"},
+{n:"Balanced Brackets",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/valid-parentheses/",ln:"#20 Valid Parentheses"},
+{n:"Sunset Views",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/buildings-with-an-ocean-view/",ln:"#1762 Buildings With an Ocean View"},
+{n:"Best Digits",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/remove-k-digits/",ln:"#402 Remove K Digits"},
+{n:"Sort Stack",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/sort-an-array/",ln:"#912 Sort an Array"},
+{n:"Next Greater Element",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/next-greater-element-i/",ln:"#496 Next Greater Element I"},
+{n:"Reverse Polish Notation",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/evaluate-reverse-polish-notation/",ln:"#150 Evaluate Reverse Polish Notation"},
+{n:"Colliding Asteroids",d:"Medium",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/asteroid-collision/",ln:"#735 Asteroid Collision"},
+{n:"Longest Palindromic Substring",d:"Medium",t:"Strings",p:"lc",l:"https://leetcode.com/problems/longest-palindromic-substring/",ln:"#5 Longest Palindromic Substring"},
+{n:"Group Anagrams",d:"Medium",t:"Strings",p:"lc",l:"https://leetcode.com/problems/group-anagrams/",ln:"#49 Group Anagrams"},
+{n:"Valid IP Addresses",d:"Medium",t:"Strings",p:"lc",l:"https://leetcode.com/problems/restore-ip-addresses/",ln:"#93 Restore IP Addresses"},
+{n:"Reverse Words In String",d:"Medium",t:"Strings",p:"lc",l:"https://leetcode.com/problems/reverse-words-in-a-string/",ln:"#151 Reverse Words in a String"},
+{n:"Minimum Characters For Words",d:"Medium",t:"Strings",p:"lc",l:"https://leetcode.com/problems/largest-character-in-string/",ln:"#1374 Generate a String With Characters That Have Odd Counts"},
+{n:"One Edit",d:"Medium",t:"Strings",p:"lc",l:"https://leetcode.com/problems/one-edit-distance/",ln:"#161 One Edit Distance"},
+{n:"Suffix Trie Construction",d:"Medium",t:"Tries",p:"lc",l:"https://leetcode.com/problems/implement-trie-prefix-tree/",ln:"#208 Implement Trie (Prefix Tree)"},
+/* ── HARD (58) ── */
+{n:"Four Number Sum",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/4sum/",ln:"#18 4Sum"},
+{n:"Subarray Sort",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/shortest-unsorted-continuous-subarray/",ln:"#581 Shortest Unsorted Continuous Subarray"},
+{n:"Largest Range",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/longest-consecutive-sequence/",ln:"#128 Longest Consecutive Sequence"},
+{n:"Min Rewards",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/candy/",ln:"#135 Candy"},
+{n:"Zigzag Traverse",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/diagonal-traverse/",ln:"#498 Diagonal Traverse"},
+{n:"Longest Subarray With Sum",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/minimum-size-subarray-sum/",ln:"#209 Minimum Size Subarray Sum"},
+{n:"Knight Connection",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/minimum-knight-moves/",ln:"#1197 Minimum Knight Moves"},
+{n:"Count Squares",d:"Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/count-square-submatrices-with-all-ones/",ln:"#1277 Count Square Submatrices With All Ones"},
+{n:"Same BSTs",d:"Hard",t:"BST",p:"lc",l:"https://leetcode.com/problems/unique-binary-search-trees/",ln:"#96 Unique Binary Search Trees"},
+{n:"Validate Three Nodes",d:"Hard",t:"BST",p:"lc",l:"https://leetcode.com/problems/validate-binary-tree-nodes/",ln:"#1361 Validate Binary Tree Nodes"},
+{n:"Repair BST",d:"Hard",t:"BST",p:"lc",l:"https://leetcode.com/problems/recover-binary-search-tree/",ln:"#99 Recover Binary Search Tree"},
+{n:"Sum BSTs",d:"Hard",t:"BST",p:"lc",l:"https://leetcode.com/problems/maximum-sum-bst-in-binary-tree/",ln:"#1373 Maximum Sum BST"},
+{n:"Max Path Sum In Binary Tree",d:"Hard",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/binary-tree-maximum-path-sum/",ln:"#124 Binary Tree Maximum Path Sum"},
+{n:"Find Nodes Distance K",d:"Hard",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/",ln:"#863 All Nodes Distance K in Binary Tree"},
+{n:"Max Sum Increasing Subsequence",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/longest-increasing-subsequence/",ln:"#300 Longest Increasing Subsequence"},
+{n:"Longest Common Subsequence",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/longest-common-subsequence/",ln:"#1143 Longest Common Subsequence"},
+{n:"Min Number Of Jumps",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/jump-game-ii/",ln:"#45 Jump Game II"},
+{n:"Water Area",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/trapping-rain-water/",ln:"#42 Trapping Rain Water"},
+{n:"Knapsack Problem",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/partition-equal-subset-sum/",ln:"#416 Partition Equal Subset Sum"},
+{n:"Disk Stacking",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/russian-doll-envelopes/",ln:"#354 Russian Doll Envelopes"},
+{n:"Numbers In Pi",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/word-break/",ln:"#139 Word Break"},
+{n:"Maximum Sum Submatrix",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/",ln:"#363 Max Sum of Rectangle No Larger Than K"},
+{n:"Maximize Expression",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/",ln:"#123 Best Time to Buy and Sell Stock III"},
+{n:"Dice Throws",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/",ln:"#1155 Number of Dice Rolls With Target Sum"},
+{n:"Juice Bottling",d:"Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/integer-break/",ln:"#343 Integer Break"},
+{n:"Dijkstra's Algorithm",d:"Hard",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/network-delay-time/",ln:"#743 Network Delay Time"},
+{n:"Topological Sort",d:"Hard",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/course-schedule-ii/",ln:"#210 Course Schedule II"},
+{n:"Kruskal's Algorithm",d:"Hard",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/min-cost-to-connect-all-points/",ln:"#1584 Min Cost to Connect All Points"},
+{n:"Prim's Algorithm",d:"Hard",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/min-cost-to-connect-all-points/",ln:"#1584 Min Cost to Connect All Points"},
+{n:"Boggle Board",d:"Hard",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/word-search-ii/",ln:"#212 Word Search II"},
+{n:"Largest Island",d:"Hard",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/making-a-large-island/",ln:"#827 Making A Large Island"},
+{n:"Continuous Median",d:"Hard",t:"Heaps",p:"lc",l:"https://leetcode.com/problems/find-median-from-data-stream/",ln:"#295 Find Median from Data Stream"},
+{n:"Sort K-Sorted Array",d:"Hard",t:"Heaps",p:"lc",l:"https://leetcode.com/problems/kth-largest-element-in-an-array/",ln:"#215 Kth Largest Element in an Array"},
+{n:"Laptop Rentals",d:"Hard",t:"Heaps",p:"lc",l:"https://leetcode.com/problems/meeting-rooms-ii/",ln:"#253 Meeting Rooms II"},
+{n:"Find Loop",d:"Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/linked-list-cycle-ii/",ln:"#142 Linked List Cycle II"},
+{n:"Reverse Linked List",d:"Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/reverse-linked-list/",ln:"#206 Reverse Linked List"},
+{n:"Merge Linked Lists",d:"Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/merge-two-sorted-lists/",ln:"#21 Merge Two Sorted Lists"},
+{n:"Shift Linked List",d:"Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/rotate-list/",ln:"#61 Rotate List"},
+{n:"Lowest Common Manager",d:"Hard",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/",ln:"#236 LCA of a Binary Tree"},
+{n:"Interweaving Strings",d:"Hard",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/interleaving-string/",ln:"#97 Interleaving String"},
+{n:"Solve Sudoku",d:"Hard",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/sudoku-solver/",ln:"#37 Sudoku Solver"},
+{n:"Generate Div Tags",d:"Hard",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/generate-parentheses/",ln:"#22 Generate Parentheses"},
+{n:"Ambiguous Measurements",d:"Hard",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/water-and-jug-problem/",ln:"#365 Water and Jug Problem"},
+{n:"Shifted Binary Search",d:"Hard",t:"Searching",p:"lc",l:"https://leetcode.com/problems/search-in-rotated-sorted-array/",ln:"#33 Search in Rotated Sorted Array"},
+{n:"Search For Range",d:"Hard",t:"Searching",p:"lc",l:"https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/",ln:"#34 Find First and Last Position"},
+{n:"Quickselect",d:"Hard",t:"Searching",p:"lc",l:"https://leetcode.com/problems/kth-largest-element-in-an-array/",ln:"#215 Kth Largest Element in an Array"},
+{n:"Index Equals Value",d:"Hard",t:"Searching",p:"lc",l:"https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/",ln:"#278 First Bad Version"},
+{n:"Quick Sort",d:"Hard",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/sort-an-array/",ln:"#912 Sort an Array (Quicksort)"},
+{n:"Heap Sort",d:"Hard",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/sort-an-array/",ln:"#912 Sort an Array (Heapsort)"},
+{n:"Radix Sort",d:"Hard",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/maximum-gap/",ln:"#164 Maximum Gap (Radix Sort)"},
+{n:"Shorten Path",d:"Hard",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/simplify-path/",ln:"#71 Simplify Path"},
+{n:"Largest Rectangle Under Skyline",d:"Hard",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/largest-rectangle-in-histogram/",ln:"#84 Largest Rectangle in Histogram"},
+{n:"Longest Substring Without Duplication",d:"Hard",t:"Strings",p:"lc",l:"https://leetcode.com/problems/longest-substring-without-repeating-characters/",ln:"#3 Longest Substring Without Repeating Characters"},
+{n:"Underscorify Substring",d:"Hard",t:"Strings",p:"lc",l:"https://leetcode.com/problems/bold-words-in-string/",ln:"#758 Bold Words in String"},
+{n:"Pattern Matcher",d:"Hard",t:"Strings",p:"lc",l:"https://leetcode.com/problems/word-pattern-ii/",ln:"#291 Word Pattern II"},
+{n:"Multi String Search",d:"Hard",t:"Tries",p:"lc",l:"https://leetcode.com/problems/word-search-ii/",ln:"#212 Word Search II"},
+{n:"Longest Most Frequent Prefix",d:"Hard",t:"Tries",p:"lc",l:"https://leetcode.com/problems/longest-word-in-dictionary/",ln:"#720 Longest Word in Dictionary"},
+{n:"Shortest Unique Prefixes",d:"Hard",t:"Tries",p:"lc",l:"https://leetcode.com/problems/replace-words/",ln:"#648 Replace Words"},
+/* ── VERY HARD (38) ── */
+{n:"Apartment Hunting",d:"Very Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/shortest-distance-from-all-buildings/",ln:"#317 Shortest Distance from All Buildings"},
+{n:"Calendar Matching",d:"Very Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/meeting-scheduler/",ln:"#1229 Meeting Scheduler"},
+{n:"Waterfall Streams",d:"Very Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/pour-water/",ln:"#755 Pour Water"},
+{n:"Minimum Area Rectangle",d:"Very Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/minimum-area-rectangle/",ln:"#939 Minimum Area Rectangle"},
+{n:"Line Through Points",d:"Very Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/max-points-on-a-line/",ln:"#149 Max Points on a Line"},
+{n:"Right Smaller Than",d:"Very Hard",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/count-of-smaller-numbers-after-self/",ln:"#315 Count of Smaller Numbers After Self"},
+{n:"Iterative In-Order Traversal",d:"Very Hard",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/binary-tree-inorder-traversal/",ln:"#94 Binary Tree Inorder Traversal"},
+{n:"Flatten Binary Tree",d:"Very Hard",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/flatten-binary-tree-to-linked-list/",ln:"#114 Flatten Binary Tree to Linked List"},
+{n:"Right Sibling Tree",d:"Very Hard",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/populating-next-right-pointers-in-each-node/",ln:"#116 Populating Next Right Pointers"},
+{n:"All Kinds Of Node Depths",d:"Very Hard",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/sum-of-distances-in-tree/",ln:"#834 Sum of Distances in Tree"},
+{n:"Compare Leaf Traversal",d:"Very Hard",t:"Binary Trees",p:"lc",l:"https://leetcode.com/problems/leaf-similar-trees/",ln:"#872 Leaf-Similar Trees"},
+{n:"Max Profit With K Transactions",d:"Very Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/",ln:"#188 Best Time to Buy and Sell Stock IV"},
+{n:"Palindrome Partitioning Min Cuts",d:"Very Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/palindrome-partitioning-ii/",ln:"#132 Palindrome Partitioning II"},
+{n:"Longest Increasing Subsequence",d:"Very Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/longest-increasing-subsequence/",ln:"#300 Longest Increasing Subsequence"},
+{n:"Longest String Chain",d:"Very Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/longest-string-chain/",ln:"#1048 Longest String Chain"},
+{n:"Square Of Zeroes",d:"Very Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/largest-1-bordered-square/",ln:"#1139 Largest 1-Bordered Square"},
+{n:"Knuth-Morris-Pratt Algorithm",d:"Very Hard",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/",ln:"#28 First Occurrence in String (KMP)"},
+{n:"A* Algorithm",d:"Very Hard",t:"Famous Algorithms",p:"lc",l:"https://leetcode.com/problems/shortest-path-in-a-grid-with-obstacles-elimination/",ln:"#1293 Shortest Path in Grid"},
+{n:"Rectangle Mania",d:"Very Hard",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/minimum-area-rectangle/",ln:"#939 Minimum Area Rectangle"},
+{n:"Detect Arbitrage",d:"Very Hard",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/cheapest-flights-within-k-stops/",ln:"#787 Cheapest Flights Within K Stops"},
+{n:"Two-Edge-Connected Graph",d:"Very Hard",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/critical-connections-in-a-network/",ln:"#1192 Critical Connections in a Network"},
+{n:"Airport Connections",d:"Very Hard",t:"Graphs",p:"lc",l:"https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/",ln:"#1976 Number of Ways to Arrive at Destination"},
+{n:"Merge Sorted Arrays",d:"Very Hard",t:"Heaps",p:"lc",l:"https://leetcode.com/problems/merge-k-sorted-lists/",ln:"#23 Merge K Sorted Lists"},
+{n:"LRU Cache",d:"Very Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/lru-cache/",ln:"#146 LRU Cache"},
+{n:"Rearrange Linked List",d:"Very Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/reorder-list/",ln:"#143 Reorder List"},
+{n:"Linked List Palindrome",d:"Very Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/palindrome-linked-list/",ln:"#234 Palindrome Linked List"},
+{n:"Zip Linked List",d:"Very Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/reorder-list/",ln:"#143 Reorder List"},
+{n:"Node Swap",d:"Very Hard",t:"Linked Lists",p:"lc",l:"https://leetcode.com/problems/swap-nodes-in-pairs/",ln:"#24 Swap Nodes in Pairs"},
+{n:"Number Of Binary Tree Topologies",d:"Very Hard",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/unique-binary-search-trees/",ln:"#96 Unique Binary Search Trees"},
+{n:"Non-Attacking Queens",d:"Very Hard",t:"Recursion",p:"lc",l:"https://leetcode.com/problems/n-queens/",ln:"#51 N-Queens"},
+{n:"Median Of Two Sorted Arrays",d:"Very Hard",t:"Searching",p:"lc",l:"https://leetcode.com/problems/median-of-two-sorted-arrays/",ln:"#4 Median of Two Sorted Arrays"},
+{n:"Optimal Assembly Line",d:"Very Hard",t:"Dynamic Programming",p:"lc",l:"https://leetcode.com/problems/split-array-largest-sum/",ln:"#410 Split Array Largest Sum"},
+{n:"Merge Sort",d:"Very Hard",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/sort-list/",ln:"#148 Sort List (Merge Sort)"},
+{n:"Count Inversions",d:"Very Hard",t:"Sorting",p:"lc",l:"https://leetcode.com/problems/count-of-smaller-numbers-after-self/",ln:"#315 Count of Smaller Numbers After Self"},
+{n:"Largest Park",d:"Very Hard",t:"Stacks",p:"lc",l:"https://leetcode.com/problems/maximal-rectangle/",ln:"#85 Maximal Rectangle"},
+{n:"Smallest Substring Containing",d:"Very Hard",t:"Strings",p:"lc",l:"https://leetcode.com/problems/minimum-window-substring/",ln:"#76 Minimum Window Substring"},
+{n:"Longest Balanced Substring",d:"Very Hard",t:"Strings",p:"lc",l:"https://leetcode.com/problems/longest-valid-parentheses/",ln:"#32 Longest Valid Parentheses"},
+{n:"Strings Made Up Of Strings",d:"Very Hard",t:"Tries",p:"lc",l:"https://leetcode.com/problems/concatenated-words/",ln:"#472 Concatenated Words"},
+];
+let filter='all';
+function dc(d){return d==='Easy'?'easy':d==='Medium'?'medium':d==='Hard'?'hard':'vhard';}
+function render(){
+  const tb=document.getElementById('tableBody');tb.innerHTML='';
+  const c={Easy:0,Medium:0,Hard:0,'Very Hard':0};
+  P.forEach((p,i)=>{
+    c[p.d]++;
+    const row=document.createElement('tr');
+    row.dataset.diff=p.d;row.dataset.name=p.n.toLowerCase();row.dataset.topic=p.t.toLowerCase();
+    const badge=`<span class="pb pb-lc">LC</span>`;
+    row.innerHTML=`<td class="num">${i+1}</td><td>${p.n}</td>
+    <td><span class="diff-badge diff-${dc(p.d)}">${p.d}</span></td>
+    <td class="topic"><span class="topic-tag">${p.t}</span></td>
+    <td><a class="lc-link lc" href="${p.l}" target="_blank">${badge} ↗ ${p.ln}</a></td>`;
+    tb.appendChild(row);
+  });
+  document.getElementById('cEasy').textContent=c.Easy;
+  document.getElementById('cMed').textContent=c.Medium;
+  document.getElementById('cHard').textContent=c.Hard;
+  document.getElementById('cVH').textContent=c['Very Hard'];
+  applyFilters();
+}
+function setFilter(v,b){filter=v;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');applyFilters();}
+function applyFilters(){
+  const q=document.getElementById('search').value.toLowerCase();let cnt=0;
+  document.querySelectorAll('#tableBody tr').forEach(r=>{
+    const ok=(filter==='all'||r.dataset.diff===filter)&&(!q||r.dataset.name.includes(q)||r.dataset.topic.includes(q));
+    r.classList.toggle('hidden',!ok);if(ok)cnt++;
+  });
+  document.getElementById('countVisible').textContent=cnt;
+}
+render();
+</script>
+</body>
+</html>
