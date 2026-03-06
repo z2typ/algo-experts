@@ -273,6 +273,7 @@
     border:2px solid var(--ink);border-radius:3px;
     background:#facc15;color:#111;
   }
+  .pb-ae{background:#d1fae5;color:#065f46;}
 
   .topic-tag{
     display:inline-block;
@@ -376,7 +377,7 @@ const P=[
 {n:"Two Number Sum",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/two-sum/",ln:"#1 Two Sum"},
 {n:"Validate Subsequence",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/is-subsequence/",ln:"#392 Is Subsequence"},
 {n:"Sorted Squared Array",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/squares-of-a-sorted-array/",ln:"#977 Squares of a Sorted Array"},
-{n:"Tournament Winner",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/sender-with-largest-word-count/",ln:"#2284 Sender With Largest Word Count"},
+{n:"Tournament Winner",d:"Easy",t:"Arrays",p:"ae"},
 {n:"Non-Constructible Change",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/maximum-number-of-consecutive-values-you-can-make/",ln:"#1798 Max Consecutive Values You Can Make"},
 {n:"Transpose Matrix",d:"Easy",t:"Arrays",p:"lc",l:"https://leetcode.com/problems/transpose-matrix/",ln:"#867 Transpose Matrix"},
 {n:"Find Closest Value In BST",d:"Easy",t:"BST",p:"lc",l:"https://leetcode.com/problems/closest-binary-search-tree-value/",ln:"#270 Closest BST Value"},
@@ -586,11 +587,13 @@ function render(){
     c[p.d]++;
     const row=document.createElement('tr');
     row.dataset.diff=p.d;row.dataset.name=p.n.toLowerCase();row.dataset.topic=p.t.toLowerCase();
-    const badge=`<span class="pb pb-lc">LC</span>`;
+    const linkCell=p.p==='ae'
+      ?`<td><span class="lc-link" style="cursor:default"><span class="pb pb-ae">AE</span> No LC equivalent</span></td>`
+      :`<td><a class="lc-link lc" href="${p.l}" target="_blank"><span class="pb pb-lc">LC</span> ↗ ${p.ln}</a></td>`;
     row.innerHTML=`<td class="num">${i+1}</td><td>${p.n}</td>
     <td><span class="diff-badge diff-${dc(p.d)}">${p.d}</span></td>
     <td class="topic"><span class="topic-tag">${p.t}</span></td>
-    <td><a class="lc-link lc" href="${p.l}" target="_blank">${badge} ↗ ${p.ln}</a></td>`;
+    ${linkCell}`;
     tb.appendChild(row);
   });
   document.getElementById('cEasy').textContent=c.Easy;
