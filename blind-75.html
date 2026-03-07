@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blind 75 — The Essential List</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fef9c3;
+    --paper:#fffde7;
+    --ink:#111111;
+    --easy:#16a34a;
+    --easy-bg:#dcfce7;
+    --medium:#1d4ed8;
+    --medium-bg:#dbeafe;
+    --hard:#ea580c;
+    --hard-bg:#ffedd5;
+    --accent:#facc15;
+    --panel-border:3px solid #111;
+    --shadow:5px 5px 0 #111;
+    --shadow-sm:3px 3px 0 #111;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    background-color:#e8d5b0;
+    background-image:
+      radial-gradient(circle, #c4a882 1px, transparent 1px);
+    background-size:18px 18px;
+    color:var(--ink);
+    font-family:'Comic Neue',cursive;
+    min-height:100vh;
+  }
+
+  /* ── HEADER PANEL ── */
+  header{
+    background:#facc15;
+    border-bottom:4px solid var(--ink);
+    padding:2.5rem 2rem 2rem;
+    text-align:center;
+    position:relative;
+    box-shadow:0 6px 0 #111;
+    overflow: hidden;
+  }
+
+  header::before{
+    content:'';
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-54%);
+    width:340px;height:340px;
+    background:
+      conic-gradient(
+        #fff176 0deg 10deg, transparent 10deg 20deg,
+        #fff176 20deg 30deg, transparent 30deg 40deg,
+        #fff176 40deg 50deg, transparent 50deg 60deg,
+        #fff176 60deg 70deg, transparent 70deg 80deg,
+        #fff176 80deg 90deg, transparent 90deg 100deg,
+        #fff176 100deg 110deg, transparent 110deg 120deg,
+        #fff176 120deg 130deg, transparent 130deg 140deg,
+        #fff176 140deg 150deg, transparent 150deg 160deg,
+        #fff176 160deg 170deg, transparent 170deg 180deg,
+        #fff176 180deg 190deg, transparent 190deg 200deg,
+        #fff176 200deg 210deg, transparent 210deg 220deg,
+        #fff176 220deg 230deg, transparent 230deg 240deg,
+        #fff176 240deg 250deg, transparent 250deg 260deg,
+        #fff176 260deg 270deg, transparent 270deg 280deg,
+        #fff176 280deg 290deg, transparent 290deg 300deg,
+        #fff176 300deg 310deg, transparent 310deg 320deg,
+        #fff176 320deg 330deg, transparent 330deg 340deg,
+        #fff176 340deg 350deg, transparent 350deg 360deg
+      );
+    border-radius:50%;
+    opacity:.5;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  header h1{
+    font-family:'Bangers',cursive;
+    font-size:clamp(3rem,8vw,6rem);
+    letter-spacing:.06em;
+    color:var(--ink);
+    text-shadow:4px 4px 0 #fff,6px 6px 0 #111;
+    position:relative;z-index:1;
+    line-height:1;
+    margin-bottom:.6rem;
+  }
+
+  header p{
+    display:inline-block;
+    background:#fff;
+    border:3px solid var(--ink);
+    border-radius:20px 20px 20px 4px;
+    padding:.5rem 1.2rem;
+    font-family:'Comic Neue',cursive;
+    font-weight:700;
+    font-size:.95rem;
+    color:var(--ink);
+    position:relative;z-index:1;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:1rem;
+  }
+  header p::after{
+    content:'';
+    position:absolute;
+    bottom:-14px;left:20px;
+    border:7px solid transparent;
+    border-top-color:#111;
+  }
+  header p::before{
+    content:'';
+    position:absolute;
+    bottom:-10px;left:21px;
+    border:6px solid transparent;
+    border-top-color:#fff;
+    z-index:1;
+  }
+
+  .burst {
+    position: absolute;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    padding: 8px 12px;
+    border: 3px solid #111;
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 #111;
+    z-index: 2;
+    font-size: 14px;
+  }
+
+  .burst-1 {
+    background: #FF2D2D;
+    color: #fff;
+    top: 20px; right: 40px;
+    transform: rotate(-7deg);
+  }
+
+  .burst-2 {
+    background: #1565FF;
+    color: #fff;
+    bottom: 20px; left: 40px;
+    transform: rotate(5deg);
+  }
+
+  /* ── CONTROLS PANEL ── */
+  .controls{
+    display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;
+    padding:1rem 2rem;position:sticky;top:0;z-index:200;
+    background:#60a5fa;
+    border-bottom:3px solid var(--ink);
+    box-shadow:0 4px 0 #111;
+  }
+
+  input[type="text"]{
+    padding:.5rem 1rem;
+    background:#fff;
+    border:3px solid var(--ink);
+    color:var(--ink);
+    font-family:'Comic Neue',cursive;font-size:.9rem;font-weight:700;
+    outline:none;width:280px;
+    border-radius:6px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .1s;
+  }
+  input[type="text"]:focus{transform:scale(1.02);}
+  input[type="text"]::placeholder{color:#94a3b8;}
+
+  .filter-btn{
+    padding:.5rem 1.1rem;
+    border:3px solid var(--ink);
+    background:#fff;
+    color:var(--ink);
+    font-family:'Bangers',cursive;font-size:1rem;letter-spacing:.06em;
+    cursor:pointer;
+    border-radius:6px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .1s,box-shadow .1s;
+  }
+  .filter-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #111;}
+  .filter-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+  .filter-btn.active{color:#fff;}
+  .filter-btn.all.active{background:#111;}
+  .filter-btn.easy.active{background:var(--easy);}
+  .filter-btn.medium.active{background:var(--medium);}
+  .filter-btn.hard.active{background:var(--hard);}
+
+  /* ── STATS BAR ── */
+  .stats{
+    display:flex;gap:1rem;justify-content:center;
+    padding:.75rem 2rem;
+    font-family:'Comic Neue',cursive;font-size:.85rem;font-weight:700;
+    color:var(--ink);flex-wrap:wrap;
+    background:#fde68a;
+    border-bottom:3px solid var(--ink);
+  }
+  .stat-item{
+    background:#fff;border:2px solid var(--ink);
+    padding:.2rem .75rem;border-radius:6px;
+    box-shadow:var(--shadow-sm);
+  }
+  .stat-item span{color:#dc2626;}
+
+  /* ── TABLE PANEL ── */
+  .table-wrap{
+    max-width:1200px;margin:2rem auto;
+    padding:0 1.5rem 4rem;
+  }
+
+  .table-wrap > table{
+    background:var(--paper);
+    border:4px solid var(--ink);
+    border-radius:4px;
+    box-shadow:8px 8px 0 #111;
+  }
+
+  table{width:100%;border-collapse:collapse;}
+
+  thead{background:#111;}
+  thead th{
+    padding:.75rem 1rem;text-align:left;
+    font-family:'Bangers',cursive;font-size:.95rem;
+    color:#facc15;letter-spacing:.1em;
+    border-right:2px solid #333;
+  }
+  thead th:last-child{border-right:none;}
+
+  tbody tr{
+    border-bottom:2px solid #e2e8f0;
+    transition:background .1s,transform .1s;
+  }
+  tbody tr:nth-child(even){background:#f8f5e4;}
+  tbody tr:hover{
+    background:#fef9c3;
+    outline:3px solid var(--ink);
+    outline-offset:-3px;
+  }
+  tbody tr.hidden{display:none;}
+
+  td{padding:.65rem 1rem;font-size:.9rem;font-family:'Comic Neue',cursive;}
+  td.num{
+    font-family:'Bangers',cursive;font-size:1.1rem;
+    color:#94a3b8;width:52px;text-align:center;
+    border-right:2px solid #e2e8f0;
+  }
+
+  tbody td:nth-child(2){font-weight:700;font-size:.95rem;}
+
+  .diff-badge{
+    display:inline-block;
+    padding:.25rem .65rem;
+    font-family:'Bangers',cursive;font-size:.85rem;
+    letter-spacing:.08em;
+    border:2px solid var(--ink);
+    border-radius:4px;
+    box-shadow:var(--shadow-sm);
+  }
+  .diff-easy{background:var(--easy-bg);color:var(--easy);}
+  .diff-medium{background:var(--medium-bg);color:var(--medium);}
+  .diff-hard{background:var(--hard-bg);color:var(--hard);}
+
+  .lc-link{
+    display:inline-flex;align-items:center;gap:.35rem;
+    text-decoration:none;
+    font-family:'Comic Neue',cursive;font-weight:700;font-size:.8rem;
+    padding:.25rem .65rem;
+    background:#7c3aed;color:#fff;
+    border:2px solid var(--ink);border-radius:4px;
+    box-shadow:var(--shadow-sm);
+    transition:transform .1s,box-shadow .1s;
+  }
+  .lc-link:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #111;}
+  .lc-link:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+
+  .pb{
+    font-size:.65rem;font-weight:700;padding:.1rem .35rem;
+    border:2px solid var(--ink);border-radius:3px;
+    background:#facc15;color:#111;
+  }
+
+  .topic-tag{
+    display:inline-block;
+    background:#e0e7ff;color:#3730a3;
+    border:2px solid #3730a3;
+    border-radius:999px;
+    padding:.1rem .55rem;font-size:.75rem;
+    font-family:'Comic Neue',cursive;font-weight:700;
+  }
+
+  ::-webkit-scrollbar{width:8px;background:#fde68a;}
+  ::-webkit-scrollbar-thumb{background:#111;border-radius:4px;}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:768px){
+    header{padding:1.75rem 1rem 1.5rem;}
+    header::before{width:220px;height:220px;}
+    .burst { display: none; }
+    .controls{padding:.75rem 1rem;gap:.5rem;}
+    input[type="text"]{width:100%;}
+    .filter-btn{padding:.4rem .75rem;font-size:.9rem;}
+    .stats{padding:.5rem 1rem;gap:.5rem;font-size:.78rem;}
+    .table-wrap{padding:0 .75rem 3rem;margin:1rem auto;}
+    td.topic,th.topic{display:none;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="burst burst-1">MUST SOLVE!</div>
+  <div class="burst burst-2">ELITE LIST!</div>
+  <h1>Blind 75</h1>
+  <p>The legendary 75 problems that cover all your bases!</p>
+</header>
+<div class="controls">
+  <input type="text" id="search" placeholder="Search by name or topic..." oninput="applyFilters()">
+  <button class="filter-btn all active" onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn easy"   onclick="setFilter('Easy',this)">Easy</button>
+  <button class="filter-btn medium" onclick="setFilter('Medium',this)">Medium</button>
+  <button class="filter-btn hard"   onclick="setFilter('Hard',this)">Hard</button>
+</div>
+<div class="stats">
+  <div class="stat-item">Showing: <span id="countVisible">—</span></div>
+  <div class="stat-item">Easy: <span id="cEasy">—</span></div>
+  <div class="stat-item">Medium: <span id="cMed">—</span></div>
+  <div class="stat-item">Hard: <span id="cHard">—</span></div>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>#</th><th>Problem Name</th><th>Difficulty</th><th class="topic">Topic</th><th>Practice Link</th></tr></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+<script>
+const P=[
+  {n:"Two Sum", d:"Easy", t:"Array", l:"https://leetcode.com/problems/two-sum/", ln:"#1 Two Sum"},
+  {n:"Longest Substring Without Repeating Characters", d:"Medium", t:"String", l:"https://leetcode.com/problems/longest-substring-without-repeating-characters/", ln:"#3 Longest Substring"},
+  {n:"Longest Palindromic Substring", d:"Medium", t:"String", l:"https://leetcode.com/problems/longest-palindromic-substring/", ln:"#5 Longest Palindromic"},
+  {n:"Container With Most Water", d:"Medium", t:"Array", l:"https://leetcode.com/problems/container-with-most-water/", ln:"#11 Most Water"},
+  {n:"3Sum", d:"Medium", t:"Array", l:"https://leetcode.com/problems/3sum/", ln:"#15 3Sum"},
+  {n:"Remove Nth Node From End of List", d:"Medium", t:"Linked List", l:"https://leetcode.com/problems/remove-nth-node-from-end-of-list/", ln:"#19 Remove Nth Node"},
+  {n:"Valid Parentheses", d:"Easy", t:"String", l:"https://leetcode.com/problems/valid-parentheses/", ln:"#20 Valid Parentheses"},
+  {n:"Merge Two Sorted Lists", d:"Easy", t:"Linked List", l:"https://leetcode.com/problems/merge-two-sorted-lists/", ln:"#21 Merge 2 Lists"},
+  {n:"Merge k Sorted Lists", d:"Hard", t:"Heap", l:"https://leetcode.com/problems/merge-k-sorted-lists/", ln:"#23 Merge K Lists"},
+  {n:"Search in Rotated Sorted Array", d:"Medium", t:"Array", l:"https://leetcode.com/problems/search-in-rotated-sorted-array/", ln:"#33 Search Rotated"},
+  {n:"Combination Sum", d:"Medium", t:"Backtracking", l:"https://leetcode.com/problems/combination-sum/", ln:"#39 Combination Sum"},
+  {n:"Group Anagrams", d:"Medium", t:"String", l:"https://leetcode.com/problems/group-anagrams/", ln:"#49 Group Anagrams"},
+  {n:"Maximum Subarray", d:"Medium", t:"Array", l:"https://leetcode.com/problems/maximum-subarray/", ln:"#53 Max Subarray"},
+  {n:"Spiral Matrix", d:"Medium", t:"Matrix", l:"https://leetcode.com/problems/spiral-matrix/", ln:"#54 Spiral Matrix"},
+  {n:"Jump Game", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/jump-game/", ln:"#55 Jump Game"},
+  {n:"Merge Intervals", d:"Medium", t:"Interval", l:"https://leetcode.com/problems/merge-intervals/", ln:"#56 Merge Intervals"},
+  {n:"Insert Interval", d:"Medium", t:"Interval", l:"https://leetcode.com/problems/insert-interval/", ln:"#57 Insert Interval"},
+  {n:"Unique Paths", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/unique-paths/", ln:"#62 Unique Paths"},
+  {n:"Climbing Stairs", d:"Easy", t:"Dynamic Programming", l:"https://leetcode.com/problems/climbing-stairs/", ln:"#70 Climbing Stairs"},
+  {n:"Set Matrix Zeroes", d:"Medium", t:"Matrix", l:"https://leetcode.com/problems/set-matrix-zeroes/", ln:"#73 Set Matrix Zeroes"},
+  {n:"Search a 2D Matrix", d:"Medium", t:"Matrix", l:"https://leetcode.com/problems/search-a-2d-matrix/", ln:"#74 Search 2D Matrix"},
+  {n:"Minimum Window Substring", d:"Hard", t:"String", l:"https://leetcode.com/problems/minimum-window-substring/", ln:"#76 Min Window Substring"},
+  {n:"Subsets", d:"Medium", t:"Backtracking", l:"https://leetcode.com/problems/subsets/", ln:"#78 Subsets"},
+  {n:"Word Search", d:"Medium", t:"Backtracking", l:"https://leetcode.com/problems/word-search/", ln:"#79 Word Search"},
+  {n:"Decode Ways", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/decode-ways/", ln:"#91 Decode Ways"},
+  {n:"Validate Binary Search Tree", d:"Medium", t:"Tree", l:"https://leetcode.com/problems/validate-binary-search-tree/", ln:"#98 Validate BST"},
+  {n:"Same Tree", d:"Easy", t:"Tree", l:"https://leetcode.com/problems/same-tree/", ln:"#100 Same Tree"},
+  {n:"Binary Tree Level Order Traversal", d:"Medium", t:"Tree", l:"https://leetcode.com/problems/binary-tree-level-order-traversal/", ln:"#102 Level Order"},
+  {n:"Maximum Depth of Binary Tree", d:"Easy", t:"Tree", l:"https://leetcode.com/problems/maximum-depth-of-binary-tree/", ln:"#104 Max Depth"},
+  {n:"Construct Binary Tree from Preorder and Inorder Traversal", d:"Medium", t:"Tree", l:"https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/", ln:"#105 Construct Tree"},
+  {n:"Best Time to Buy and Sell Stock", d:"Easy", t:"Array", l:"https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", ln:"#121 Buy/Sell Stock"},
+  {n:"Binary Tree Maximum Path Sum", d:"Hard", t:"Tree", l:"https://leetcode.com/problems/binary-tree-maximum-path-sum/", ln:"#124 Max Path Sum"},
+  {n:"Valid Palindrome", d:"Easy", t:"String", l:"https://leetcode.com/problems/valid-palindrome/", ln:"#125 Valid Palindrome"},
+  {n:"Word Break", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/word-break/", ln:"#139 Word Break"},
+  {n:"Linked List Cycle", d:"Easy", t:"Linked List", l:"https://leetcode.com/problems/linked-list-cycle/", ln:"#141 LL Cycle"},
+  {n:"Reorder List", d:"Medium", t:"Linked List", l:"https://leetcode.com/problems/reorder-list/", ln:"#143 Reorder List"},
+  {n:"Maximum Product Subarray", d:"Medium", t:"Array", l:"https://leetcode.com/problems/maximum-product-subarray/", ln:"#152 Max Product Sub"},
+  {n:"Find Minimum in Rotated Sorted Array", d:"Medium", t:"Array", l:"https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/", ln:"#153 Min in Rotated"},
+  {n:"Reverse Linked List", d:"Easy", t:"Linked List", l:"https://leetcode.com/problems/reverse-linked-list/", ln:"#206 Reverse LL"},
+  {n:"Course Schedule", d:"Medium", t:"Graph", l:"https://leetcode.com/problems/course-schedule/", ln:"#207 Course Schedule"},
+  {n:"Implement Trie (Prefix Tree)", d:"Medium", t:"Tree", l:"https://leetcode.com/problems/implement-trie-prefix-tree/", ln:"#208 Implement Trie"},
+  {n:"Design Add and Search Words Data Structure", d:"Medium", t:"Tree", l:"https://leetcode.com/problems/design-add-and-search-words-data-structure/", ln:"#211 Word Dictionary"},
+  {n:"Word Search II", d:"Hard", t:"Tree", l:"https://leetcode.com/problems/word-search-ii/", ln:"#212 Word Search II"},
+  {n:"House Robber", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/house-robber/", ln:"#198 House Robber"},
+  {n:"House Robber II", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/house-robber-ii/", ln:"#213 House Robber II"},
+  {n:"Number of Islands", d:"Medium", t:"Graph", l:"https://leetcode.com/problems/number-of-islands/", ln:"#200 Num Islands"},
+  {n:"Reverse Bits", d:"Easy", t:"Binary", l:"https://leetcode.com/problems/reverse-bits/", ln:"#190 Reverse Bits"},
+  {n:"Number of 1 Bits", d:"Easy", t:"Binary", l:"https://leetcode.com/problems/number-of-1-bits/", ln:"#191 Num 1 Bits"},
+  {n:"Kth Smallest Element in a BST", d:"Medium", t:"Tree", l:"https://leetcode.com/problems/kth-smallest-element-in-a-bst/", ln:"#230 Kth Smallest BST"},
+  {n:"Lowest Common Ancestor of a Binary Search Tree", d:"Easy", t:"Tree", l:"https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/", ln:"#235 LCA BST"},
+  {n:"Lowest Common Ancestor of a Binary Tree", d:"Medium", t:"Tree", l:"https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/", ln:"#236 LCA Binary Tree"},
+  {n:"Product of Array Except Self", d:"Medium", t:"Array", l:"https://leetcode.com/problems/product-of-array-except-self/", ln:"#238 Product Except Self"},
+  {n:"Valid Anagram", d:"Easy", t:"String", l:"https://leetcode.com/problems/valid-anagram/", ln:"#242 Valid Anagram"},
+  {n:"Meeting Rooms", d:"Easy", t:"Interval", l:"https://leetcode.com/problems/meeting-rooms/", ln:"#252 Meeting Rooms"},
+  {n:"Meeting Rooms II", d:"Medium", t:"Interval", l:"https://leetcode.com/problems/meeting-rooms-ii/", ln:"#253 Meeting Rooms II"},
+  {n:"Graph Valid Tree", d:"Medium", t:"Graph", l:"https://leetcode.com/problems/graph-valid-tree/", ln:"#261 Graph Valid Tree"},
+  {n:"Missing Number", d:"Easy", t:"Binary", l:"https://leetcode.com/problems/missing-number/", ln:"#268 Missing Number"},
+  {n:"Alien Dictionary", d:"Hard", t:"Graph", l:"https://leetcode.com/problems/alien-dictionary/", ln:"#269 Alien Dictionary"},
+  {n:"Encode and Decode Strings", d:"Medium", t:"String", l:"https://leetcode.com/problems/encode-and-decode-strings/", ln:"#271 Encode/Decode"},
+  {n:"Find Median from Data Stream", d:"Hard", t:"Heap", l:"https://leetcode.com/problems/find-median-from-data-stream/", ln:"#295 Median Stream"},
+  {n:"Longest Increasing Subsequence", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/longest-increasing-subsequence/", ln:"#300 LIS"},
+  {n:"Coin Change", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/coin-change/", ln:"#322 Coin Change"},
+  {n:"Number of Connected Components in an Undirected Graph", d:"Medium", t:"Graph", l:"https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/", ln:"#323 Connected Comp"},
+  {n:"Counting Bits", d:"Easy", t:"Binary", l:"https://leetcode.com/problems/counting-bits/", ln:"#338 Counting Bits"},
+  {n:"Top K Frequent Elements", d:"Medium", t:"Heap", l:"https://leetcode.com/problems/top-k-frequent-elements/", ln:"#347 Top K Frequent"},
+  {n:"Sum of Two Integers", d:"Medium", t:"Binary", l:"https://leetcode.com/problems/sum-of-two-integers/", ln:"#371 Sum 2 Ints"},
+  {n:"Pacific Atlantic Water Flow", d:"Medium", t:"Graph", l:"https://leetcode.com/problems/pacific-atlantic-water-flow/", ln:"#417 Pacific Atlantic"},
+  {n:"Longest Repeating Character Replacement", d:"Medium", t:"String", l:"https://leetcode.com/problems/longest-repeating-character-replacement/", ln:"#424 Repeating Char"},
+  {n:"Non-overlapping Intervals", d:"Medium", t:"Interval", l:"https://leetcode.com/problems/non-overlapping-intervals/", ln:"#435 Non-overlap Int"},
+  {n:"Serialize and Deserialize Binary Tree", d:"Hard", t:"Tree", l:"https://leetcode.com/problems/serialize-and-deserialize-binary-tree/", ln:"#297 Serialize Tree"},
+  {n:"Subtree of Another Tree", d:"Easy", t:"Tree", l:"https://leetcode.com/problems/subtree-of-another-tree/", ln:"#572 Subtree"},
+  {n:"Palindromic Substrings", d:"Medium", t:"String", l:"https://leetcode.com/problems/palindromic-substrings/", ln:"#647 Palindromic Subs"},
+  {n:"Longest Common Subsequence", d:"Medium", t:"Dynamic Programming", l:"https://leetcode.com/problems/longest-common-subsequence/", ln:"#1143 LCS"},
+  {n:"Invert Binary Tree", d:"Easy", t:"Tree", l:"https://leetcode.com/problems/invert-binary-tree/", ln:"#226 Invert Tree"},
+  {n:"Contains Duplicate", d:"Easy", t:"Array", l:"https://leetcode.com/problems/contains-duplicate/", ln:"#217 Contains Dup"}
+];
+
+let filter='all';
+function dc(d){return d==='Easy'?'easy':d==='Medium'?'medium':'hard';}
+function render(){
+  const tb=document.getElementById('tableBody');tb.innerHTML='';
+  const c={Easy:0,Medium:0,Hard:0};
+  P.forEach((p,i)=>{
+    c[p.d]++;
+    const row=document.createElement('tr');
+    row.dataset.diff=p.d;row.dataset.name=p.n.toLowerCase();row.dataset.topic=p.t.toLowerCase();
+    row.innerHTML=`<td class="num">${i+1}</td><td>${p.n}</td>
+    <td><span class="diff-badge diff-${dc(p.d)}">${p.d}</span></td>
+    <td class="topic"><span class="topic-tag">${p.t}</span></td>
+    <td><a class="lc-link" href="${p.l}" target="_blank"><span class="pb">LC</span> &#x2197; ${p.ln}</a></td>`;
+    tb.appendChild(row);
+  });
+  document.getElementById('cEasy').textContent=c.Easy;
+  document.getElementById('cMed').textContent=c.Medium;
+  document.getElementById('cHard').textContent=c.Hard;
+  applyFilters();
+}
+function setFilter(v,b){filter=v;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');applyFilters();}
+function applyFilters(){
+  const q=document.getElementById('search').value.toLowerCase();let cnt=0;
+  document.querySelectorAll('#tableBody tr').forEach(r=>{
+    const ok=(filter==='all'||r.dataset.diff===filter)&&(!q||r.dataset.name.includes(q)||r.dataset.topic.includes(q));
+    r.classList.toggle('hidden',!ok);if(ok)cnt++;
+  });
+  document.getElementById('countVisible').textContent=cnt;
+}
+render();
+</script>
+</body>
+</html>

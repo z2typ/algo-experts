@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Review Later</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#fffde7;
+    --ink:#111111;
+    --easy:#16a34a;
+    --easy-bg:#dcfce7;
+    --medium:#1d4ed8;
+    --medium-bg:#dbeafe;
+    --hard:#ea580c;
+    --hard-bg:#ffedd5;
+    --shadow:5px 5px 0 #111;
+    --shadow-sm:3px 3px 0 #111;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    background-color:#e8d5b0;
+    background-image:radial-gradient(circle,#c4a882 1px,transparent 1px);
+    background-size:18px 18px;
+    color:var(--ink);
+    font-family:'Comic Neue',cursive;
+    min-height:100vh;
+  }
+
+  /* ── HEADER ── */
+  header{
+    background:#facc15;
+    border-bottom:4px solid var(--ink);
+    padding:2.5rem 2rem 2rem;
+    text-align:center;
+    position:relative;
+    box-shadow:0 6px 0 #111;
+  }
+  header::before{
+    content:'';
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-54%);
+    width:340px;height:340px;
+    background:conic-gradient(
+      #fff176 0deg 10deg,transparent 10deg 20deg,
+      #fff176 20deg 30deg,transparent 30deg 40deg,
+      #fff176 40deg 50deg,transparent 50deg 60deg,
+      #fff176 60deg 70deg,transparent 70deg 80deg,
+      #fff176 80deg 90deg,transparent 90deg 100deg,
+      #fff176 100deg 110deg,transparent 110deg 120deg,
+      #fff176 120deg 130deg,transparent 130deg 140deg,
+      #fff176 140deg 150deg,transparent 150deg 160deg,
+      #fff176 160deg 170deg,transparent 170deg 180deg,
+      #fff176 180deg 190deg,transparent 190deg 200deg,
+      #fff176 200deg 210deg,transparent 210deg 220deg,
+      #fff176 220deg 230deg,transparent 230deg 240deg,
+      #fff176 240deg 250deg,transparent 250deg 260deg,
+      #fff176 260deg 270deg,transparent 270deg 280deg,
+      #fff176 280deg 290deg,transparent 290deg 300deg,
+      #fff176 300deg 310deg,transparent 310deg 320deg,
+      #fff176 320deg 330deg,transparent 330deg 340deg,
+      #fff176 340deg 350deg,transparent 350deg 360deg
+    );
+    border-radius:50%;opacity:.5;pointer-events:none;z-index:0;
+  }
+  header h1{
+    font-family:'Bangers',cursive;
+    font-size:clamp(3rem,8vw,6rem);
+    letter-spacing:.06em;color:var(--ink);
+    text-shadow:4px 4px 0 #fff,6px 6px 0 #111;
+    position:relative;z-index:1;line-height:1;margin-bottom:.6rem;
+  }
+  header p{
+    display:inline-block;background:#fff;
+    border:3px solid var(--ink);border-radius:20px 20px 20px 4px;
+    padding:.5rem 1.2rem;font-family:'Comic Neue',cursive;font-weight:700;
+    font-size:.95rem;color:var(--ink);
+    position:relative;z-index:1;box-shadow:var(--shadow-sm);margin-bottom:1rem;
+  }
+  header p::after{content:'';position:absolute;bottom:-14px;left:20px;border:7px solid transparent;border-top-color:#111;}
+  header p::before{content:'';position:absolute;bottom:-10px;left:21px;border:6px solid transparent;border-top-color:#fff;z-index:1;}
+
+  /* ── ADD FORM ── */
+  .add-panel{
+    max-width:900px;margin:2rem auto 0;padding:0 1.5rem;
+  }
+  .add-box{
+    background:var(--paper);
+    border:4px solid var(--ink);border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:1.25rem 1.5rem;
+  }
+  .add-box h2{
+    font-family:'Bangers',cursive;font-size:1.4rem;letter-spacing:.06em;
+    margin-bottom:1rem;color:var(--ink);
+  }
+  .add-row{
+    display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end;
+  }
+  .add-row .field{display:flex;flex-direction:column;gap:.3rem;}
+  .add-row .field label{
+    font-size:.75rem;font-weight:700;letter-spacing:.04em;color:#64748b;
+  }
+  .field-name{flex:2;min-width:200px;}
+  .field-source{flex:1;min-width:130px;}
+  .field-ref{flex:1;min-width:100px;}
+  .field-note{flex:2;min-width:180px;}
+
+  input[type="text"],select{
+    padding:.5rem .75rem;
+    background:#fff;border:3px solid var(--ink);
+    color:var(--ink);font-family:'Comic Neue',cursive;
+    font-size:.9rem;font-weight:700;outline:none;
+    border-radius:6px;box-shadow:var(--shadow-sm);
+    transition:transform .1s;width:100%;
+  }
+  input[type="text"]:focus,select:focus{transform:scale(1.02);}
+  input[type="text"]::placeholder{color:#94a3b8;font-weight:400;}
+
+  .btn-add{
+    padding:.55rem 1.4rem;
+    border:3px solid var(--ink);background:#111;color:#facc15;
+    font-family:'Bangers',cursive;font-size:1.1rem;letter-spacing:.06em;
+    cursor:pointer;border-radius:6px;box-shadow:var(--shadow-sm);
+    transition:transform .1s,box-shadow .1s;white-space:nowrap;
+    align-self:flex-end;
+  }
+  .btn-add:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #facc15;}
+  .btn-add:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+
+  /* ── CONTROLS ── */
+  .controls{
+    display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;
+    padding:1rem 2rem;position:sticky;top:0;z-index:200;
+    background:#60a5fa;border-bottom:3px solid var(--ink);
+    box-shadow:0 4px 0 #111;
+  }
+  .filter-btn{
+    padding:.5rem 1.1rem;border:3px solid var(--ink);background:#fff;
+    color:var(--ink);font-family:'Bangers',cursive;font-size:1rem;
+    letter-spacing:.06em;cursor:pointer;border-radius:6px;
+    box-shadow:var(--shadow-sm);transition:transform .1s,box-shadow .1s;
+  }
+  .filter-btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #111;}
+  .filter-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+  .filter-btn.active{color:#fff;}
+  .filter-btn.all.active{background:#111;}
+  .filter-btn.pending.active{background:#f59e0b;}
+  .filter-btn.done.active{background:#16a34a;}
+
+  .btn-clear{
+    padding:.5rem 1.1rem;border:3px solid var(--ink);background:#fee2e2;
+    color:#dc2626;font-family:'Bangers',cursive;font-size:1rem;
+    letter-spacing:.06em;cursor:pointer;border-radius:6px;
+    box-shadow:var(--shadow-sm);transition:transform .1s,box-shadow .1s;
+  }
+  .btn-clear:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 #111;}
+  .btn-clear:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+
+  /* ── STATS ── */
+  .stats{
+    display:flex;gap:1rem;justify-content:center;
+    padding:.75rem 2rem;
+    font-family:'Comic Neue',cursive;font-size:.85rem;font-weight:700;
+    color:var(--ink);flex-wrap:wrap;
+    background:#fde68a;border-bottom:3px solid var(--ink);
+  }
+  .stat-item{
+    background:#fff;border:2px solid var(--ink);
+    padding:.2rem .75rem;border-radius:6px;box-shadow:var(--shadow-sm);
+  }
+  .stat-item span{color:#dc2626;}
+
+  /* ── LIST ── */
+  .list-wrap{
+    max-width:900px;margin:2rem auto;padding:0 1.5rem 4rem;
+  }
+
+  .empty-state{
+    background:var(--paper);border:4px dashed #94a3b8;
+    border-radius:8px;padding:3rem;text-align:center;
+    color:#94a3b8;font-family:'Bangers',cursive;font-size:1.5rem;
+    letter-spacing:.06em;
+  }
+
+  .item{
+    background:var(--paper);
+    border:3px solid var(--ink);border-radius:4px;
+    box-shadow:var(--shadow-sm);
+    margin-bottom:.75rem;
+    display:flex;align-items:flex-start;gap:.85rem;
+    padding:.75rem 1rem;
+    transition:opacity .2s,background .2s;
+    position:relative;
+  }
+  .item.done-item{
+    background:#f0fdf4;opacity:.75;
+  }
+  .item.hidden{display:none;}
+
+  /* custom checkbox */
+  .item-check{
+    width:24px;height:24px;flex-shrink:0;margin-top:.1rem;
+    border:3px solid var(--ink);border-radius:4px;
+    background:#fff;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow-sm);transition:background .1s,transform .1s;
+  }
+  .item-check:hover{transform:scale(1.1);}
+  .item-check.checked{background:#16a34a;border-color:#16a34a;}
+  .item-check.checked::after{
+    content:'✓';color:#fff;font-size:14px;font-weight:900;line-height:1;
+  }
+
+  .item-body{flex:1;min-width:0;}
+  .item-top{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;}
+  .item-name{
+    font-weight:700;font-size:.95rem;
+    transition:text-decoration .2s,color .2s;
+  }
+  .done-item .item-name{
+    text-decoration:line-through;color:#94a3b8;
+  }
+  .item-link{
+    color:var(--ink);text-decoration:none;
+    border-bottom:2px solid #7c3aed;
+  }
+  .item-link:hover{background:#ede9fe;border-radius:3px;}
+  .done-item .item-link{border-bottom-color:#94a3b8;}
+  .item-ref{
+    font-size:.78rem;color:#64748b;font-weight:700;
+  }
+  .item-note{
+    font-size:.82rem;color:#64748b;margin-top:.2rem;font-style:italic;
+  }
+  .item-meta{
+    font-size:.72rem;color:#94a3b8;margin-top:.2rem;
+  }
+
+  /* source badges */
+  .badge{
+    font-size:.65rem;font-weight:700;padding:.1rem .4rem;
+    border:2px solid var(--ink);border-radius:3px;white-space:nowrap;
+    font-family:'Comic Neue',cursive;
+  }
+  .badge-ae{background:#facc15;color:#111;}
+  .badge-ctci{background:#d1fae5;color:#065f46;}
+  .badge-lc{background:#7c3aed;color:#fff;}
+  .badge-other{background:#e2e8f0;color:#475569;}
+
+  .btn-delete{
+    width:28px;height:28px;flex-shrink:0;
+    border:2px solid var(--ink);background:#fee2e2;color:#dc2626;
+    font-size:1rem;font-weight:900;line-height:1;
+    cursor:pointer;border-radius:4px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:2px 2px 0 #111;transition:transform .1s,box-shadow .1s;
+  }
+  .btn-delete:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 #111;background:#fecaca;}
+  .btn-delete:active{transform:translate(1px,1px);box-shadow:none;}
+
+  /* ── progress bar ── */
+  .progress-wrap{
+    max-width:900px;margin:1.5rem auto 0;padding:0 1.5rem;
+  }
+  .progress-bar-bg{
+    background:#fff;border:3px solid var(--ink);border-radius:999px;
+    height:18px;box-shadow:var(--shadow-sm);overflow:hidden;
+  }
+  .progress-bar-fill{
+    height:100%;background:#16a34a;border-radius:999px;
+    transition:width .4s ease;
+  }
+  .progress-label{
+    font-size:.78rem;font-weight:700;color:var(--ink);
+    text-align:right;margin-top:.3rem;
+  }
+
+  ::-webkit-scrollbar{width:8px;background:#fde68a;}
+  ::-webkit-scrollbar-thumb{background:#111;border-radius:4px;}
+
+  @media(max-width:600px){
+    .add-row{flex-direction:column;}
+    .field-name,.field-source,.field-ref,.field-note{min-width:100%;flex:unset;}
+    .btn-add{width:100%;}
+    .controls{padding:.75rem 1rem;gap:.5rem;}
+    .filter-btn{font-size:.9rem;padding:.4rem .75rem;}
+    .list-wrap{padding:0 .75rem 3rem;}
+    .add-panel{padding:0 .75rem;}
+    .progress-wrap{padding:0 .75rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Review<br>Later</h1>
+  <p>Your personal DSA problem queue &#x2014; check off as you go!</p>
+</header>
+
+<div class="add-panel">
+  <div class="add-box">
+    <h2>+ Add a Problem</h2>
+    <div class="add-row">
+      <div class="field field-name">
+        <label>PROBLEM NAME</label>
+        <input type="text" id="inp-name" placeholder="e.g. Tournament Winner" autocomplete="off">
+      </div>
+      <div class="field field-source">
+        <label>SOURCE</label>
+        <select id="inp-source">
+          <option value="ae">AlgoExpert</option>
+          <option value="ctci">CTCI</option>
+          <option value="lc">LeetCode</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="field field-ref">
+        <label>CH. / # (optional)</label>
+        <input type="text" id="inp-ref" placeholder="e.g. 4.8 or #42" autocomplete="off">
+      </div>
+      <div class="field field-ref">
+        <label>LINK (optional)</label>
+        <input type="text" id="inp-link" placeholder="https://..." autocomplete="off">
+      </div>
+      <div class="field field-note">
+        <label>NOTE (optional)</label>
+        <input type="text" id="inp-note" placeholder="e.g. review DP approach" autocomplete="off">
+      </div>
+      <button class="btn-add" onclick="addItem()">ADD &#x2192;</button>
+    </div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label" id="progressLabel">0 / 0 done</div>
+</div>
+
+<div class="controls">
+  <button class="filter-btn all active" onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn pending" onclick="setFilter('pending',this)">Pending</button>
+  <button class="filter-btn done" onclick="setFilter('done',this)">Done</button>
+  <button class="btn-clear" onclick="clearDone()">Clear Done</button>
+</div>
+
+<div class="stats">
+  <div class="stat-item">Total: <span id="sTotal">0</span></div>
+  <div class="stat-item">Pending: <span id="sPending">0</span></div>
+  <div class="stat-item">Done: <span id="sDone">0</span></div>
+</div>
+
+<div class="list-wrap">
+  <div id="emptyState" class="empty-state" style="display:none">
+    Nothing here yet &#x2014; add a problem above!
+  </div>
+  <div id="listContainer"></div>
+</div>
+
+<script>
+const STORAGE_KEY = 'dsa-review-list';
+let filter = 'all';
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch(e) { return []; }
+}
+
+function save(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+
+function addItem() {
+  const name = document.getElementById('inp-name').value.trim();
+  if (!name) {
+    document.getElementById('inp-name').focus();
+    return;
+  }
+  const source = document.getElementById('inp-source').value;
+  const ref    = document.getElementById('inp-ref').value.trim();
+  const link   = document.getElementById('inp-link').value.trim();
+  const note   = document.getElementById('inp-note').value.trim();
+
+  const items = load();
+  items.unshift({ id: uid(), name, source, ref, link, note, done: false, addedAt: Date.now() });
+  save(items);
+
+  document.getElementById('inp-name').value = '';
+  document.getElementById('inp-ref').value  = '';
+  document.getElementById('inp-link').value = '';
+  document.getElementById('inp-note').value = '';
+  document.getElementById('inp-name').focus();
+  render();
+}
+
+function toggleDone(id) {
+  const items = load();
+  const item  = items.find(x => x.id === id);
+  if (item) item.done = !item.done;
+  save(items);
+  render();
+}
+
+function deleteItem(id) {
+  const items = load().filter(x => x.id !== id);
+  save(items);
+  render();
+}
+
+function clearDone() {
+  const items = load().filter(x => !x.done);
+  save(items);
+  render();
+}
+
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function badgeClass(src) {
+  return src === 'ae' ? 'badge-ae' : src === 'ctci' ? 'badge-ctci' : src === 'lc' ? 'badge-lc' : 'badge-other';
+}
+function badgeLabel(src) {
+  return src === 'ae' ? 'AlgoExpert' : src === 'ctci' ? 'CTCI' : src === 'lc' ? 'LeetCode' : 'Other';
+}
+
+function formatDate(ts) {
+  return new Date(ts).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+function render() {
+  const items  = load();
+  const total  = items.length;
+  const done   = items.filter(x => x.done).length;
+  const pct    = total ? Math.round((done / total) * 100) : 0;
+
+  document.getElementById('sTotal').textContent   = total;
+  document.getElementById('sPending').textContent = total - done;
+  document.getElementById('sDone').textContent    = done;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done} / ${total} done`;
+
+  const container = document.getElementById('listContainer');
+  const empty     = document.getElementById('emptyState');
+
+  const visible = items.filter(x =>
+    filter === 'all' ? true : filter === 'done' ? x.done : !x.done
+  );
+
+  if (items.length === 0) {
+    empty.style.display = 'block';
+    container.innerHTML = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  container.innerHTML = visible.map(item => `
+    <div class="item ${item.done ? 'done-item' : ''}" id="item-${item.id}">
+      <div class="item-check ${item.done ? 'checked' : ''}" onclick="toggleDone('${item.id}')"></div>
+      <div class="item-body">
+        <div class="item-top">
+          ${item.link
+            ? `<a class="item-name item-link" href="${escHtml(item.link)}" target="_blank">${escHtml(item.name)} &#x2197;</a>`
+            : `<span class="item-name">${escHtml(item.name)}</span>`}
+          <span class="badge ${badgeClass(item.source)}">${badgeLabel(item.source)}</span>
+          ${item.ref ? `<span class="item-ref">${escHtml(item.ref)}</span>` : ''}
+        </div>
+        ${item.note ? `<div class="item-note">${escHtml(item.note)}</div>` : ''}
+        <div class="item-meta">Added ${formatDate(item.addedAt)}</div>
+      </div>
+      <button class="btn-delete" onclick="deleteItem('${item.id}')" title="Remove">&#x2715;</button>
+    </div>
+  `).join('');
+
+  if (visible.length === 0) {
+    container.innerHTML = `<div class="empty-state">No ${filter} problems here!</div>`;
+  }
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// submit on Enter in the name field
+document.getElementById('inp-name').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addItem();
+});
+document.getElementById('inp-ref').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addItem();
+});
+document.getElementById('inp-link').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addItem();
+});
+document.getElementById('inp-note').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addItem();
+});
+
+render();
+</script>
+</body>
+</html>
